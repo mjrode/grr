@@ -8,6 +8,10 @@
     <meta name="description"
         content="Premium lifestyle apparel for those who work hard and live well. Wilmington meets Austin.">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,6 +116,7 @@
 
         section {
             padding: var(--space-16) 0;
+            scroll-margin-top: 80px;
         }
 
         /* ========================================
@@ -376,6 +381,12 @@
             aspect-ratio: 1;
             object-fit: cover;
             border-radius: 4px;
+            cursor: pointer;
+            transition: opacity var(--transition-fast);
+        }
+
+        .shirt-images img:hover {
+            opacity: 0.85;
         }
 
         .shirt-info {
@@ -405,6 +416,69 @@
             .collection-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
+        }
+
+        /* ========================================
+           LIGHTBOX
+           ======================================== */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-4);
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--cream);
+            font-size: var(--text-3xl);
+            cursor: pointer;
+            padding: var(--space-2);
+            min-width: var(--touch-min);
+            min-height: var(--touch-min);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            color: var(--orange);
+        }
+
+        .lightbox-caption {
+            text-align: center;
+            color: var(--cream);
+            margin-top: var(--space-4);
+            font-size: var(--text-lg);
         }
 
         /* ========================================
@@ -609,8 +683,10 @@
                 <div class="collection-grid">
                     <article class="shirt-card">
                         <div class="shirt-images">
-                            <img src="images/shirt1_front.png" alt="Beach Truck t-shirt front view">
-                            <img src="images/shirt1_back.png" alt="Beach Truck t-shirt back view">
+                            <img src="images/shirt1_front.png" alt="Beach Truck t-shirt front view"
+                                onclick="openLightbox(this)" data-name="Beach Truck - Front">
+                            <img src="images/shirt1_back.png" alt="Beach Truck t-shirt back view"
+                                onclick="openLightbox(this)" data-name="Beach Truck - Back">
                         </div>
                         <div class="shirt-info">
                             <h3 class="shirt-name">Beach Truck</h3>
@@ -620,8 +696,10 @@
 
                     <article class="shirt-card">
                         <div class="shirt-images">
-                            <img src="images/shirt2_front.png" alt="Longhorn Pier t-shirt front view">
-                            <img src="images/shirt2_back.png" alt="Longhorn Pier t-shirt back view">
+                            <img src="images/shirt2_front.png" alt="Longhorn Pier t-shirt front view"
+                                onclick="openLightbox(this)" data-name="Longhorn Pier - Front">
+                            <img src="images/shirt2_back.png" alt="Longhorn Pier t-shirt back view"
+                                onclick="openLightbox(this)" data-name="Longhorn Pier - Back">
                         </div>
                         <div class="shirt-info">
                             <h3 class="shirt-name">Longhorn Pier</h3>
@@ -631,8 +709,10 @@
 
                     <article class="shirt-card">
                         <div class="shirt-images">
-                            <img src="images/shirt3_front.png" alt="Vintage Skull t-shirt front view">
-                            <img src="images/shirt3_back.png" alt="Vintage Skull t-shirt back view">
+                            <img src="images/shirt3_front.png" alt="Vintage Skull t-shirt front view"
+                                onclick="openLightbox(this)" data-name="Vintage Skull - Front">
+                            <img src="images/shirt3_back.png" alt="Vintage Skull t-shirt back view"
+                                onclick="openLightbox(this)" data-name="Vintage Skull - Back">
                         </div>
                         <div class="shirt-info">
                             <h3 class="shirt-name">Vintage Skull</h3>
@@ -642,8 +722,10 @@
 
                     <article class="shirt-card">
                         <div class="shirt-images">
-                            <img src="images/shirt4_front.png" alt="Wave + Texas t-shirt front view">
-                            <img src="images/shirt4_back.png" alt="Wave + Texas t-shirt back view">
+                            <img src="images/shirt4_front.png" alt="Wave + Texas t-shirt front view"
+                                onclick="openLightbox(this)" data-name="Wave + Texas - Front">
+                            <img src="images/shirt4_back.png" alt="Wave + Texas t-shirt back view"
+                                onclick="openLightbox(this)" data-name="Wave + Texas - Back">
                         </div>
                         <div class="shirt-info">
                             <h3 class="shirt-name">Wave + Texas</h3>
@@ -671,6 +753,47 @@
         <p class="footer-tagline">Gather. Rest. Rise.</p>
         <p class="footer-locations">ILM × ATX</p>
     </footer>
+
+    <!-- Lightbox for full-size images -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">×</button>
+            <img id="lightbox-img" src="" alt="">
+            <p class="lightbox-caption" id="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(img) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightboxCaption.textContent = img.dataset.name || img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            // Only close if clicking the background or close button
+            if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 </body>
 
 </html>
