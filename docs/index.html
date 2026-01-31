@@ -19,29 +19,14 @@
         rel="stylesheet">
 
     <style>
-        /* ========================================
-           GRR WEBSITE - Design System
-           
-           Skills Applied:
-           - mobile-design: Touch-first, 44px min targets, thumb zone
-           - ui-ux-pro-max: Color contrast, accessibility, responsive
-           - frontend-design: Distinctive aesthetic, asymmetry, restraint
-           
-           Aesthetic: "Coastal Grit" - Premium athletic meets editorial
-           ======================================== */
-
         :root {
-            /* Brand Colors */
             --orange: #C2561C;
             --orange-dark: #9A4515;
             --cream: #F5F2EB;
             --black: #1A1A1A;
             --white: #FFFFFF;
-
-            /* Typography Scale (mobile-first) */
             --font-display: 'Bebas Neue', sans-serif;
             --font-body: 'Inter', sans-serif;
-
             --text-xs: 0.75rem;
             --text-sm: 0.875rem;
             --text-base: 1rem;
@@ -51,9 +36,6 @@
             --text-3xl: 2rem;
             --text-4xl: 2.5rem;
             --text-5xl: 3.5rem;
-
-            /* Spacing */
-            --space-1: 0.25rem;
             --space-2: 0.5rem;
             --space-3: 0.75rem;
             --space-4: 1rem;
@@ -64,16 +46,11 @@
             --space-12: 3rem;
             --space-16: 4rem;
             --space-20: 5rem;
-
-            /* Touch targets (mobile-design: min 44px) */
             --touch-min: 44px;
-
-            /* Transitions */
             --transition-fast: 150ms ease;
             --transition-base: 250ms ease;
         }
 
-        /* Reset */
         *,
         *::before,
         *::after {
@@ -84,7 +61,6 @@
 
         html {
             scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -94,7 +70,6 @@
             color: var(--black);
             background-color: var(--cream);
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         img {
@@ -102,10 +77,6 @@
             height: auto;
             display: block;
         }
-
-        /* ========================================
-           LAYOUT
-           ======================================== */
 
         .container {
             width: 100%;
@@ -119,12 +90,7 @@
             scroll-margin-top: 80px;
         }
 
-        /* ========================================
-           HEADER / NAV
-           Mobile: Fixed bottom nav (thumb zone)
-           Desktop: Top nav
-           ======================================== */
-
+        /* NAV */
         .nav {
             position: fixed;
             bottom: 0;
@@ -152,8 +118,7 @@
             transition: color var(--transition-fast);
         }
 
-        .nav a:hover,
-        .nav a:focus {
+        .nav a:hover {
             color: var(--orange);
         }
 
@@ -163,7 +128,6 @@
             color: var(--orange) !important;
         }
 
-        /* Desktop nav */
         @media (min-width: 768px) {
             .nav {
                 top: 0;
@@ -181,10 +145,7 @@
             }
         }
 
-        /* ========================================
-           HERO SECTION
-           ======================================== */
-
+        /* HERO */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -194,7 +155,6 @@
             text-align: center;
             padding: var(--space-20) var(--space-5);
             padding-bottom: calc(var(--space-20) + 60px);
-            /* Account for bottom nav */
         }
 
         .hero-logo {
@@ -232,10 +192,7 @@
             }
         }
 
-        /* ========================================
-           BRAND STORY SECTION
-           ======================================== */
-
+        /* STORY */
         .story {
             background: var(--black);
             color: var(--cream);
@@ -292,10 +249,7 @@
             }
         }
 
-        /* ========================================
-           PILLARS SECTION
-           ======================================== */
-
+        /* PILLARS */
         .pillars {
             background: var(--cream);
         }
@@ -339,89 +293,110 @@
             }
         }
 
-        /* ========================================
-           COLLECTION SECTION
-           ======================================== */
-
-        .collection {
+        /* COLLECTION HEADER */
+        .collection-intro {
             background: var(--black);
             color: var(--cream);
-        }
-
-        .collection-header {
             text-align: center;
-            margin-bottom: var(--space-10);
         }
 
-        .collection-grid {
+        /* FEATURED SHIRT SECTIONS */
+        .shirt-feature {
+            padding: var(--space-12) 0;
+        }
+
+        .shirt-feature:nth-child(odd) {
+            background: var(--cream);
+        }
+
+        .shirt-feature:nth-child(even) {
+            background: var(--white);
+        }
+
+        .shirt-feature-inner {
             display: grid;
             gap: var(--space-8);
+            align-items: center;
         }
 
-        .shirt-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform var(--transition-base);
-        }
-
-        .shirt-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .shirt-images {
+        .shirt-gallery {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-2);
-            padding: var(--space-4);
+            gap: var(--space-4);
         }
 
-        .shirt-images img {
+        .shirt-gallery img {
             width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: opacity var(--transition-fast);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .shirt-images img:hover {
-            opacity: 0.85;
+        .shirt-gallery img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
-        .shirt-info {
-            padding: var(--space-4);
+        .shirt-details {
             text-align: center;
         }
 
-        .shirt-name {
+        .shirt-details h3 {
             font-family: var(--font-display);
-            font-size: var(--text-xl);
-            margin-bottom: var(--space-1);
+            font-size: var(--text-3xl);
+            color: var(--black);
+            margin-bottom: var(--space-2);
         }
 
-        .shirt-tagline {
-            font-size: var(--text-sm);
+        .shirt-details .tagline {
+            font-size: var(--text-lg);
             color: var(--orange);
             font-style: italic;
+            margin-bottom: var(--space-4);
+        }
+
+        .shirt-details .description {
+            color: var(--black);
+            opacity: 0.8;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .shirt-details .price {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            color: var(--black);
+            margin-top: var(--space-4);
         }
 
         @media (min-width: 768px) {
-            .collection-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .shirt-feature-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .shirt-feature:nth-child(even) .shirt-feature-inner {
+                direction: rtl;
+            }
+
+            .shirt-feature:nth-child(even) .shirt-feature-inner>* {
+                direction: ltr;
+            }
+
+            .shirt-details {
+                text-align: left;
+            }
+
+            .shirt-details h3 {
+                font-size: var(--text-4xl);
+            }
+
+            .shirt-details .description {
+                margin: 0;
             }
         }
 
-        @media (min-width: 1024px) {
-            .collection-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* ========================================
-           LIGHTBOX
-           ======================================== */
-
+        /* LIGHTBOX */
         .lightbox {
             display: none;
             position: fixed;
@@ -434,6 +409,7 @@
             justify-content: center;
             align-items: center;
             padding: var(--space-4);
+            cursor: pointer;
         }
 
         .lightbox.active {
@@ -442,49 +418,58 @@
 
         .lightbox-content {
             position: relative;
-            max-width: 90vw;
-            max-height: 90vh;
+            max-width: 95vw;
+            max-height: 95vh;
+            cursor: default;
         }
 
         .lightbox-content img {
             max-width: 100%;
-            max-height: 85vh;
+            max-height: 90vh;
             object-fit: contain;
             border-radius: 8px;
         }
 
         .lightbox-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            background: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--orange);
             border: none;
             color: var(--cream);
-            font-size: var(--text-3xl);
+            font-size: var(--text-2xl);
             cursor: pointer;
-            padding: var(--space-2);
-            min-width: var(--touch-min);
-            min-height: var(--touch-min);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 101;
         }
 
         .lightbox-close:hover {
-            color: var(--orange);
+            background: var(--orange-dark);
         }
 
         .lightbox-caption {
             text-align: center;
             color: var(--cream);
             margin-top: var(--space-4);
-            font-size: var(--text-lg);
+            font-size: var(--text-xl);
+            font-family: var(--font-display);
         }
 
-        /* ========================================
-           COMING SOON / CTA SECTION
-           ======================================== */
+        .lightbox-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: var(--text-sm);
+        }
 
+        /* CTA */
         .cta {
             background: var(--orange);
             color: var(--cream);
@@ -521,17 +506,13 @@
             }
         }
 
-        /* ========================================
-           FOOTER
-           ======================================== */
-
+        /* FOOTER */
         .footer {
             background: var(--black);
             color: var(--cream);
             text-align: center;
             padding: var(--space-8) var(--space-5);
             padding-bottom: calc(var(--space-8) + 60px);
-            /* Account for bottom nav on mobile */
         }
 
         .footer-logo {
@@ -558,10 +539,7 @@
             }
         }
 
-        /* ========================================
-           ACCESSIBILITY
-           ======================================== */
-
+        /* ACCESSIBILITY */
         @media (prefers-reduced-motion: reduce) {
             html {
                 scroll-behavior: auto;
@@ -571,7 +549,6 @@
             *::before,
             *::after {
                 transition-duration: 0.01ms !important;
-                animation-duration: 0.01ms !important;
             }
         }
 
@@ -581,7 +558,6 @@
             outline-offset: 2px;
         }
 
-        /* Skip link for accessibility */
         .skip-link {
             position: absolute;
             top: -40px;
@@ -595,13 +571,20 @@
         .skip-link:focus {
             top: 0;
         }
+
+        /* Tap indicator for mobile */
+        .tap-hint {
+            font-size: var(--text-xs);
+            color: var(--orange);
+            text-align: center;
+            margin-top: var(--space-2);
+        }
     </style>
 </head>
 
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- Navigation (bottom on mobile, top on desktop) -->
     <nav class="nav" aria-label="Main navigation">
         <a href="#top" class="nav-logo">GRR</a>
         <a href="#story">Story</a>
@@ -610,58 +593,51 @@
     </nav>
 
     <main id="main">
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero" id="top">
-            <img src="images/title_hero.png" alt="GRR - Gather Rest Rise logo with ILM and ATX scenic split"
-                class="hero-logo">
+            <img src="images/title_hero.png" alt="GRR - Gather Rest Rise logo" class="hero-logo">
             <h1 class="hero-tagline">Gather. Rest. Rise.</h1>
             <p class="hero-sub">Premium lifestyle apparel for those who work hard and live well.</p>
         </section>
 
-        <!-- Brand Story Section -->
+        <!-- Story -->
         <section class="story" id="story">
             <div class="container">
                 <div class="story-content">
                     <span class="section-label">The Story</span>
                     <h2 class="section-title">Two places shaped us.</h2>
-
                     <div class="story-location">
                         <h3>Wilmington, NC</h3>
                         <p>Morning paddle-outs before the house wakes. Sunset dinners on the porch with family. Salt air
                             and slow mornings.</p>
                     </div>
-
                     <div class="story-location">
                         <h3>Austin, TX</h3>
                         <p>Dawn gym sessions. Building something meaningful. Home for dinner with the people who matter
                             most.</p>
                     </div>
-
                     <p class="story-manifesto">For those who refuse to choose. Crush your goals AND be present. Fitness
                         fuels. Rest sharpens. Family grounds.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Pillars Section -->
+        <!-- Pillars -->
         <section class="pillars" id="pillars">
             <div class="container">
                 <span class="section-label">The Meaning</span>
                 <h2 class="section-title">What GRR stands for</h2>
-
                 <div class="pillars-grid">
                     <div class="pillar">
                         <h3>Gather</h3>
                         <p class="pillar-tagline">Family. Friends. Community.</p>
                         <p>Bring together what matters most. This is your fuel.</p>
                     </div>
-
                     <div class="pillar">
                         <h3>Rest</h3>
                         <p class="pillar-tagline">Recovery is strategy.</p>
                         <p>Your best work comes after intentional rest. Not lazy—smart.</p>
                     </div>
-
                     <div class="pillar">
                         <h3>Rise</h3>
                         <p class="pillar-tagline">Stronger every day.</p>
@@ -671,72 +647,123 @@
             </div>
         </section>
 
-        <!-- Collection Section -->
-        <section class="collection" id="collection">
+        <!-- Collection Intro -->
+        <section class="collection-intro" id="collection">
             <div class="container">
-                <div class="collection-header">
-                    <span class="section-label">The Collection</span>
-                    <h2 class="section-title">Premium T-Shirts</h2>
-                    <p>$45 • 100% Cotton • Made to Last</p>
-                </div>
+                <span class="section-label">The Collection</span>
+                <h2 class="section-title">Premium T-Shirts</h2>
+                <p>$45 • 100% Cotton • Made to Last</p>
+                <p class="tap-hint" style="margin-top: var(--space-4); opacity: 0.7;">Tap any image to view full size
+                </p>
+            </div>
+        </section>
 
-                <div class="collection-grid">
-                    <article class="shirt-card">
-                        <div class="shirt-images">
-                            <img src="images/shirt1_front.png" alt="Beach Truck t-shirt front view"
-                                onclick="openLightbox(this)" data-name="Beach Truck - Front">
-                            <img src="images/shirt1_back.png" alt="Beach Truck t-shirt back view"
-                                onclick="openLightbox(this)" data-name="Beach Truck - Back">
-                        </div>
-                        <div class="shirt-info">
-                            <h3 class="shirt-name">Beach Truck</h3>
-                            <p class="shirt-tagline">Vintage soul meets coastal freedom</p>
-                        </div>
-                    </article>
-
-                    <article class="shirt-card">
-                        <div class="shirt-images">
-                            <img src="images/shirt2_front.png" alt="Longhorn Pier t-shirt front view"
-                                onclick="openLightbox(this)" data-name="Longhorn Pier - Front">
-                            <img src="images/shirt2_back.png" alt="Longhorn Pier t-shirt back view"
-                                onclick="openLightbox(this)" data-name="Longhorn Pier - Back">
-                        </div>
-                        <div class="shirt-info">
-                            <h3 class="shirt-name">Longhorn Pier</h3>
-                            <p class="shirt-tagline">Texas pride meets ocean tide</p>
-                        </div>
-                    </article>
-
-                    <article class="shirt-card">
-                        <div class="shirt-images">
-                            <img src="images/shirt3_front.png" alt="Vintage Skull t-shirt front view"
-                                onclick="openLightbox(this)" data-name="Vintage Skull - Front">
-                            <img src="images/shirt3_back.png" alt="Vintage Skull t-shirt back view"
-                                onclick="openLightbox(this)" data-name="Vintage Skull - Back">
-                        </div>
-                        <div class="shirt-info">
-                            <h3 class="shirt-name">Vintage Skull</h3>
-                            <p class="shirt-tagline">Heritage. Grit. Timeless.</p>
-                        </div>
-                    </article>
-
-                    <article class="shirt-card">
-                        <div class="shirt-images">
-                            <img src="images/shirt4_front.png" alt="Wave + Texas t-shirt front view"
-                                onclick="openLightbox(this)" data-name="Wave + Texas - Front">
-                            <img src="images/shirt4_back.png" alt="Wave + Texas t-shirt back view"
-                                onclick="openLightbox(this)" data-name="Wave + Texas - Back">
-                        </div>
-                        <div class="shirt-info">
-                            <h3 class="shirt-name">Wave + Texas</h3>
-                            <p class="shirt-tagline">Clean lines. Bold roots.</p>
-                        </div>
-                    </article>
+        <!-- Shirt 1: Beach Truck -->
+        <section class="shirt-feature">
+            <div class="container">
+                <div class="shirt-feature-inner">
+                    <div class="shirt-gallery">
+                        <img src="images/shirt1_front.png" alt="Beach Truck - Front" onclick="openLightbox(this)"
+                            data-name="Beach Truck - Front">
+                        <img src="images/shirt1_back.png" alt="Beach Truck - Back" onclick="openLightbox(this)"
+                            data-name="Beach Truck - Back">
+                    </div>
+                    <div class="shirt-details">
+                        <h3>Beach Truck</h3>
+                        <p class="tagline">Vintage soul meets coastal freedom</p>
+                        <p class="description">A sun-faded pickup loaded with boards, parked where the pier meets the
+                            sand. For those who chase both waves and goals.</p>
+                        <p class="price">$45</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
+        <!-- Shirt 2: Longhorn Pier -->
+        <section class="shirt-feature">
+            <div class="container">
+                <div class="shirt-feature-inner">
+                    <div class="shirt-gallery">
+                        <img src="images/shirt2_front.png" alt="Longhorn Pier - Front" onclick="openLightbox(this)"
+                            data-name="Longhorn Pier - Front">
+                        <img src="images/shirt2_back.png" alt="Longhorn Pier - Back" onclick="openLightbox(this)"
+                            data-name="Longhorn Pier - Back">
+                    </div>
+                    <div class="shirt-details">
+                        <h3>Longhorn Pier</h3>
+                        <p class="tagline">Texas pride meets ocean tide</p>
+                        <p class="description">The unmistakable silhouette with the Carolina pier framed inside. Two
+                            spirits, one shirt.</p>
+                        <p class="price">$45</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shirt 3: Vintage Skull -->
+        <section class="shirt-feature">
+            <div class="container">
+                <div class="shirt-feature-inner">
+                    <div class="shirt-gallery">
+                        <img src="images/shirt3_front.png" alt="Vintage Skull - Front" onclick="openLightbox(this)"
+                            data-name="Vintage Skull - Front">
+                        <img src="images/shirt3_back.png" alt="Vintage Skull - Back" onclick="openLightbox(this)"
+                            data-name="Vintage Skull - Back">
+                    </div>
+                    <div class="shirt-details">
+                        <h3>Vintage Skull</h3>
+                        <p class="tagline">Heritage. Grit. Timeless.</p>
+                        <p class="description">Sun-bleached and wave-worn. The skull that's seen a thousand sunrises—and
+                            earned every one.</p>
+                        <p class="price">$45</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shirt 4: Wave + Texas -->
+        <section class="shirt-feature">
+            <div class="container">
+                <div class="shirt-feature-inner">
+                    <div class="shirt-gallery">
+                        <img src="images/shirt4_front.png" alt="Wave + Texas - Front" onclick="openLightbox(this)"
+                            data-name="Wave + Texas - Front">
+                        <img src="images/shirt4_back.png" alt="Wave + Texas - Back" onclick="openLightbox(this)"
+                            data-name="Wave + Texas - Back">
+                    </div>
+                    <div class="shirt-details">
+                        <h3>Wave + Texas</h3>
+                        <p class="tagline">Clean lines. Bold roots.</p>
+                        <p class="description">The Lone Star State split between coast and city. ILM flows, ATX rises.
+                        </p>
+                        <p class="price">$45</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shirt 5: Sticker Bomb -->
+        <section class="shirt-feature">
+            <div class="container">
+                <div class="shirt-feature-inner">
+                    <div class="shirt-gallery">
+                        <img src="images/shirt5_front.png" alt="Sticker Bomb - Front" onclick="openLightbox(this)"
+                            data-name="Sticker Bomb - Front">
+                        <img src="images/shirt5_back.png" alt="Sticker Bomb - Back" onclick="openLightbox(this)"
+                            data-name="Sticker Bomb - Back">
+                    </div>
+                    <div class="shirt-details">
+                        <h3>Sticker Bomb</h3>
+                        <p class="tagline">Every badge tells a story.</p>
+                        <p class="description">Texas pennants, coastal vibes, and everything in between. The full GRR
+                            experience in one design.</p>
+                        <p class="price">$45</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
         <section class="cta">
             <div class="container">
                 <h2 class="cta-title">Coming Soon</h2>
@@ -747,28 +774,28 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-logo">GRR</div>
         <p class="footer-tagline">Gather. Rest. Rise.</p>
         <p class="footer-locations">ILM × ATX</p>
     </footer>
 
-    <!-- Lightbox for full-size images -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-        <div class="lightbox-content">
-            <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">×</button>
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">×</button>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
             <img id="lightbox-img" src="" alt="">
             <p class="lightbox-caption" id="lightbox-caption"></p>
         </div>
+        <p class="lightbox-hint">Click anywhere or press ESC to close</p>
     </div>
 
     <script>
-        function openLightbox(img) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
 
+        function openLightbox(img) {
             lightboxImg.src = img.src;
             lightboxImg.alt = img.alt;
             lightboxCaption.textContent = img.dataset.name || img.alt;
@@ -776,22 +803,17 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeLightbox(event) {
-            // Only close if clicking the background or close button
-            if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
-                const lightbox = document.getElementById('lightbox');
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
-        // Close on escape key
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                const lightbox = document.getElementById('lightbox');
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+            if (e.key === 'Escape') closeLightbox();
         });
     </script>
 </body>
