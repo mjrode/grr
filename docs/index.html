@@ -469,6 +469,43 @@
             font-size: var(--text-sm);
         }
 
+        /* Gallery Promo */
+        .gallery-promo {
+            background: var(--black);
+            color: var(--cream);
+            text-align: center;
+        }
+
+        .gallery-promo-title {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            color: var(--orange);
+            margin-bottom: var(--space-4);
+        }
+
+        .gallery-promo-text {
+            font-size: var(--text-lg);
+            margin-bottom: var(--space-8);
+            opacity: 0.9;
+        }
+
+        .gallery-btn {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--cream);
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            text-decoration: none;
+            padding: var(--space-4) var(--space-8);
+            border-radius: 8px;
+            transition: var(--transition-base);
+        }
+
+        .gallery-btn:hover {
+            background: var(--orange-dark);
+            transform: translateY(-2px);
+        }
+
         /* CTA */
         .cta {
             background: var(--orange);
@@ -760,6 +797,16 @@
                         <p class="price">$45</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Gallery Promo -->
+        <section class="gallery-promo" id="vote">
+            <div class="container">
+                <h2 class="gallery-promo-title">Help Us Choose</h2>
+                <p class="gallery-promo-text">We've got 16 unique designs and we need your help picking the best
+                    ones.<br>Vote for your 5 favorites!</p>
+                <a href="gallery.html" class="gallery-btn">View All Designs & Vote →</a>
             </div>
         </section>
 

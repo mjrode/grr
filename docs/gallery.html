@@ -14,6 +14,7 @@
             --orange: #C2561C;
             --cream: #F5F2EB;
             --black: #1A1A1A;
+            --green: #2E7D32;
         }
 
         * {
@@ -35,6 +36,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
@@ -52,6 +56,22 @@
 
         .back-link:hover {
             color: var(--orange);
+        }
+
+        /* Vote Counter */
+        .vote-bar {
+            background: var(--orange);
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: 600;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+        }
+
+        .vote-bar.complete {
+            background: var(--green);
         }
 
         main {
@@ -84,8 +104,8 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
         }
 
         .gallery-item:hover {
@@ -97,14 +117,62 @@
             width: 100%;
             height: 320px;
             object-fit: cover;
+            cursor: pointer;
+        }
+
+        .gallery-item .info {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .gallery-item .name {
-            padding: 1rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--black);
             font-weight: 500;
             word-break: break-all;
+            flex: 1;
+        }
+
+        .vote-btn {
+            background: var(--cream);
+            border: 2px solid var(--orange);
+            color: var(--orange);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .vote-btn:hover:not(:disabled) {
+            background: var(--orange);
+            color: white;
+        }
+
+        .vote-btn.voted {
+            background: var(--orange);
+            color: white;
+        }
+
+        .vote-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .vote-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--orange);
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
         /* Lightbox */
@@ -170,6 +238,22 @@
             color: var(--orange);
         }
 
+        /* Thank you message */
+        .thank-you {
+            background: var(--green);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .thank-you h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
@@ -183,6 +267,11 @@
             h1 {
                 font-size: 2rem;
             }
+
+            .vote-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -193,9 +282,18 @@
         <a href="index.html" class="back-link">← Back to Home</a>
     </header>
 
+    <div class="vote-bar" id="vote-bar">
+        You have <span id="votes-remaining">5</span> votes remaining
+    </div>
+
     <main>
         <h1>Design Gallery</h1>
-        <p class="subtitle">16 unique t-shirt designs for review and selection</p>
+        <p class="subtitle">Click any design to enlarge. Vote for your 5 favorites!</p>
+
+        <div id="thank-you" class="thank-you" style="display: none;">
+            <h2>🎉 Thanks for voting!</h2>
+            <p>Your votes help us choose the best designs for our launch collection.</p>
+        </div>
 
         <div class="gallery" id="gallery">
             <!-- Images loaded dynamically -->
@@ -231,19 +329,97 @@
             'tshirt_back_design1_v2_1769888257909.png'
         ];
 
+        const MAX_VOTES = 5;
         let currentIndex = 0;
+
+        // Cookie helpers
+        function setCookie(name, value, days) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+        }
+
+        function getCookie(name) {
+            return document.cookie.split('; ').reduce((r, v) => {
+                const parts = v.split('=');
+                return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+            }, '');
+        }
+
+        // Vote tracking
+        function getVotes() {
+            const votes = getCookie('grr_votes');
+            return votes ? JSON.parse(votes) : [];
+        }
+
+        function saveVotes(votes) {
+            setCookie('grr_votes', JSON.stringify(votes), 365);
+        }
+
+        function toggleVote(imageName) {
+            let votes = getVotes();
+            const index = votes.indexOf(imageName);
+
+            if (index > -1) {
+                // Remove vote
+                votes.splice(index, 1);
+            } else if (votes.length < MAX_VOTES) {
+                // Add vote
+                votes.push(imageName);
+            }
+
+            saveVotes(votes);
+            updateUI();
+        }
+
+        function updateUI() {
+            const votes = getVotes();
+            const remaining = MAX_VOTES - votes.length;
+
+            // Update vote bar
+            document.getElementById('votes-remaining').textContent = remaining;
+            const voteBar = document.getElementById('vote-bar');
+
+            if (remaining === 0) {
+                voteBar.textContent = "✓ You've used all 5 votes! Thanks for voting!";
+                voteBar.classList.add('complete');
+                document.getElementById('thank-you').style.display = 'block';
+            } else {
+                voteBar.innerHTML = `You have <span id="votes-remaining">${remaining}</span> votes remaining`;
+                voteBar.classList.remove('complete');
+                document.getElementById('thank-you').style.display = 'none';
+            }
+
+            // Update buttons
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                const img = btn.dataset.image;
+                const isVoted = votes.includes(img);
+                btn.classList.toggle('voted', isVoted);
+                btn.textContent = isVoted ? '✓ Voted' : 'Vote';
+                btn.disabled = !isVoted && remaining === 0;
+            });
+        }
 
         // Render gallery
         const gallery = document.getElementById('gallery');
+        const votes = getVotes();
+
         images.forEach((img, index) => {
             const item = document.createElement('div');
             item.className = 'gallery-item';
+            const isVoted = votes.includes(img);
+
             item.innerHTML = `
                 <img src="images/gallery/${encodeURIComponent(img)}" alt="${img}" onclick="openLightbox(${index})">
-                <div class="name">${img}</div>
+                <div class="info">
+                    <span class="name">${img.replace(/_\d+\.png$/, '.png').replace(/_/g, ' ')}</span>
+                    <button class="vote-btn ${isVoted ? 'voted' : ''}" data-image="${img}" onclick="toggleVote('${img}')">${isVoted ? '✓ Voted' : 'Vote'}</button>
+                </div>
             `;
             gallery.appendChild(item);
         });
+
+        // Initial UI update
+        updateUI();
 
         // Lightbox functions
         function openLightbox(index) {
