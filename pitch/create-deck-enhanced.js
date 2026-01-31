@@ -204,19 +204,20 @@ async function createEnhancedDeck() {
         fontSize: 12, color: CREAM, align: 'right'
     });
 
-    // 4 shirts in row
+    // 5 shirts in row
     const shirts = [
         { folder: 'shirt1', title: 'BEACH TRUCK' },
         { folder: 'shirt2', title: 'LONGHORN PIER' },
         { folder: 'shirt3', title: 'VINTAGE SKULL' },
-        { folder: 'shirt4', title: 'WAVE + TEXAS' }
+        { folder: 'shirt4', title: 'WAVE + TEXAS' },
+        { folder: 'shirt5', title: 'STICKER BOMB' }
     ];
 
     shirts.forEach((s, i) => {
-        const x = 0.4 + (i * 2.4);
+        const x = 0.3 + (i * 1.9);
         slide.addImage({
             path: path.join(brandDir, `tshirts/${s.folder}/back.png`),
-            x: x, y: 1.3, w: 2.2, h: 2.7
+            x: x, y: 1.3, w: 1.7, h: 2.2
         });
         slide.addText(s.title, {
             x: x, y: 4.1, w: 2.2, h: 0.35,
@@ -240,7 +241,8 @@ async function createEnhancedDeck() {
         { folder: 'shirt1', num: '04', title: 'BEACH TRUCK', tagline: 'Vintage soul meets coastal freedom' },
         { folder: 'shirt2', num: '05', title: 'LONGHORN PIER', tagline: 'Texas pride meets ocean tide' },
         { folder: 'shirt3', num: '06', title: 'VINTAGE SKULL', tagline: 'Heritage. Grit. Timeless.' },
-        { folder: 'shirt4', num: '07', title: 'WAVE + TEXAS', tagline: 'Clean lines. Bold roots.' }
+        { folder: 'shirt4', num: '07', title: 'WAVE + TEXAS', tagline: 'Clean lines. Bold roots.' },
+        { folder: 'shirt5', num: '08', title: 'STICKER BOMB', tagline: 'Every badge tells a story.' }
     ];
 
     shirtDetails.forEach((s) => {
@@ -298,7 +300,7 @@ async function createEnhancedDeck() {
     });
 
     // Section number
-    slide.addText('08', {
+    slide.addText('09', {
         x: 0.3, y: 0.2, w: 1.2, h: 0.7,
         fontSize: 40, bold: true, color: DARK_ORANGE
     });
