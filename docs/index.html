@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRR | Gather. Rest. Rise.</title>
+    <meta name="description"
+        content="Premium lifestyle apparel for those who work hard and live well. Wilmington meets Austin.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ========================================
+           GRR WEBSITE - Design System
+           
+           Skills Applied:
+           - mobile-design: Touch-first, 44px min targets, thumb zone
+           - ui-ux-pro-max: Color contrast, accessibility, responsive
+           - frontend-design: Distinctive aesthetic, asymmetry, restraint
+           
+           Aesthetic: "Coastal Grit" - Premium athletic meets editorial
+           ======================================== */
+
+        :root {
+            /* Brand Colors */
+            --orange: #C2561C;
+            --orange-dark: #9A4515;
+            --cream: #F5F2EB;
+            --black: #1A1A1A;
+            --white: #FFFFFF;
+
+            /* Typography Scale (mobile-first) */
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3.5rem;
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+
+            /* Touch targets (mobile-design: min 44px) */
+            --touch-min: 44px;
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+        }
+
+        /* Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ========================================
+           LAYOUT
+           ======================================== */
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        section {
+            padding: var(--space-16) 0;
+        }
+
+        /* ========================================
+           HEADER / NAV
+           Mobile: Fixed bottom nav (thumb zone)
+           Desktop: Top nav
+           ======================================== */
+
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--black);
+            padding: var(--space-3) var(--space-4);
+            z-index: 50;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: var(--text-xs);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: var(--space-2) var(--space-3);
+            min-height: var(--touch-min);
+            display: flex;
+            align-items: center;
+            transition: color var(--transition-fast);
+        }
+
+        .nav a:hover,
+        .nav a:focus {
+            color: var(--orange);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            color: var(--orange) !important;
+        }
+
+        /* Desktop nav */
+        @media (min-width: 768px) {
+            .nav {
+                top: 0;
+                bottom: auto;
+                padding: var(--space-4) var(--space-8);
+            }
+
+            .nav a {
+                font-size: var(--text-sm);
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .nav-logo {
+                font-size: var(--text-2xl);
+            }
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-20) var(--space-5);
+            padding-bottom: calc(var(--space-20) + 60px);
+            /* Account for bottom nav */
+        }
+
+        .hero-logo {
+            width: 280px;
+            max-width: 80%;
+            margin-bottom: var(--space-6);
+        }
+
+        .hero-tagline {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            letter-spacing: 0.02em;
+            color: var(--black);
+            margin-bottom: var(--space-4);
+        }
+
+        .hero-sub {
+            font-size: var(--text-lg);
+            color: var(--orange-dark);
+            max-width: 480px;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                padding-top: calc(var(--space-20) + 80px);
+                padding-bottom: var(--space-20);
+            }
+
+            .hero-logo {
+                width: 400px;
+            }
+
+            .hero-tagline {
+                font-size: var(--text-5xl);
+            }
+        }
+
+        /* ========================================
+           BRAND STORY SECTION
+           ======================================== */
+
+        .story {
+            background: var(--black);
+            color: var(--cream);
+        }
+
+        .story-content {
+            max-width: 640px;
+        }
+
+        .section-label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            margin-bottom: var(--space-4);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-6);
+            line-height: 1.1;
+        }
+
+        .story-location {
+            margin-bottom: var(--space-6);
+        }
+
+        .story-location h3 {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: var(--space-2);
+        }
+
+        .story-location p {
+            color: rgba(245, 242, 235, 0.85);
+            line-height: 1.7;
+        }
+
+        .story-manifesto {
+            font-size: var(--text-xl);
+            font-weight: 500;
+            color: var(--cream);
+            border-left: 3px solid var(--orange);
+            padding-left: var(--space-5);
+            margin-top: var(--space-8);
+        }
+
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: var(--text-4xl);
+            }
+        }
+
+        /* ========================================
+           PILLARS SECTION
+           ======================================== */
+
+        .pillars {
+            background: var(--cream);
+        }
+
+        .pillars-grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        .pillar {
+            border-top: 3px solid var(--orange);
+            padding-top: var(--space-5);
+        }
+
+        .pillar h3 {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            color: var(--black);
+            margin-bottom: var(--space-2);
+        }
+
+        .pillar-tagline {
+            font-weight: 600;
+            color: var(--orange-dark);
+            margin-bottom: var(--space-2);
+        }
+
+        .pillar p {
+            color: var(--black);
+            opacity: 0.8;
+        }
+
+        @media (min-width: 768px) {
+            .pillars-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--space-8);
+            }
+
+            .pillar h3 {
+                font-size: var(--text-3xl);
+            }
+        }
+
+        /* ========================================
+           COLLECTION SECTION
+           ======================================== */
+
+        .collection {
+            background: var(--black);
+            color: var(--cream);
+        }
+
+        .collection-header {
+            text-align: center;
+            margin-bottom: var(--space-10);
+        }
+
+        .collection-grid {
+            display: grid;
+            gap: var(--space-8);
+        }
+
+        .shirt-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform var(--transition-base);
+        }
+
+        .shirt-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .shirt-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2);
+            padding: var(--space-4);
+        }
+
+        .shirt-images img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .shirt-info {
+            padding: var(--space-4);
+            text-align: center;
+        }
+
+        .shirt-name {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-1);
+        }
+
+        .shirt-tagline {
+            font-size: var(--text-sm);
+            color: var(--orange);
+            font-style: italic;
+        }
+
+        @media (min-width: 768px) {
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .collection-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* ========================================
+           COMING SOON / CTA SECTION
+           ======================================== */
+
+        .cta {
+            background: var(--orange);
+            color: var(--cream);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-4);
+        }
+
+        .cta-sub {
+            font-size: var(--text-lg);
+            margin-bottom: var(--space-8);
+            opacity: 0.9;
+        }
+
+        .cta-badge {
+            display: inline-block;
+            background: var(--black);
+            color: var(--cream);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: var(--space-3) var(--space-6);
+            border-radius: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .cta-title {
+                font-size: var(--text-5xl);
+            }
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+
+        .footer {
+            background: var(--black);
+            color: var(--cream);
+            text-align: center;
+            padding: var(--space-8) var(--space-5);
+            padding-bottom: calc(var(--space-8) + 60px);
+            /* Account for bottom nav on mobile */
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            color: var(--orange);
+            margin-bottom: var(--space-2);
+        }
+
+        .footer-tagline {
+            font-size: var(--text-sm);
+            opacity: 0.7;
+            margin-bottom: var(--space-4);
+        }
+
+        .footer-locations {
+            font-size: var(--text-sm);
+            letter-spacing: 0.1em;
+        }
+
+        @media (min-width: 768px) {
+            .footer {
+                padding-bottom: var(--space-8);
+            }
+        }
+
+        /* ========================================
+           ACCESSIBILITY
+           ======================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+
+        a:focus,
+        button:focus {
+            outline: 2px solid var(--orange);
+            outline-offset: 2px;
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--orange);
+            color: var(--cream);
+            padding: var(--space-2) var(--space-4);
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Navigation (bottom on mobile, top on desktop) -->
+    <nav class="nav" aria-label="Main navigation">
+        <a href="#top" class="nav-logo">GRR</a>
+        <a href="#story">Story</a>
+        <a href="#pillars">Meaning</a>
+        <a href="#collection">Collection</a>
+    </nav>
+
+    <main id="main">
+        <!-- Hero Section -->
+        <section class="hero" id="top">
+            <img src="images/title_hero.png" alt="GRR - Gather Rest Rise logo with ILM and ATX scenic split"
+                class="hero-logo">
+            <h1 class="hero-tagline">Gather. Rest. Rise.</h1>
+            <p class="hero-sub">Premium lifestyle apparel for those who work hard and live well.</p>
+        </section>
+
+        <!-- Brand Story Section -->
+        <section class="story" id="story">
+            <div class="container">
+                <div class="story-content">
+                    <span class="section-label">The Story</span>
+                    <h2 class="section-title">Two places shaped us.</h2>
+
+                    <div class="story-location">
+                        <h3>Wilmington, NC</h3>
+                        <p>Morning paddle-outs before the house wakes. Sunset dinners on the porch with family. Salt air
+                            and slow mornings.</p>
+                    </div>
+
+                    <div class="story-location">
+                        <h3>Austin, TX</h3>
+                        <p>Dawn gym sessions. Building something meaningful. Home for dinner with the people who matter
+                            most.</p>
+                    </div>
+
+                    <p class="story-manifesto">For those who refuse to choose. Crush your goals AND be present. Fitness
+                        fuels. Rest sharpens. Family grounds.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pillars Section -->
+        <section class="pillars" id="pillars">
+            <div class="container">
+                <span class="section-label">The Meaning</span>
+                <h2 class="section-title">What GRR stands for</h2>
+
+                <div class="pillars-grid">
+                    <div class="pillar">
+                        <h3>Gather</h3>
+                        <p class="pillar-tagline">Family. Friends. Community.</p>
+                        <p>Bring together what matters most. This is your fuel.</p>
+                    </div>
+
+                    <div class="pillar">
+                        <h3>Rest</h3>
+                        <p class="pillar-tagline">Recovery is strategy.</p>
+                        <p>Your best work comes after intentional rest. Not lazy—smart.</p>
+                    </div>
+
+                    <div class="pillar">
+                        <h3>Rise</h3>
+                        <p class="pillar-tagline">Stronger every day.</p>
+                        <p>Show up for the gym. For work. For your family. Rise to meet it.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collection Section -->
+        <section class="collection" id="collection">
+            <div class="container">
+                <div class="collection-header">
+                    <span class="section-label">The Collection</span>
+                    <h2 class="section-title">Premium T-Shirts</h2>
+                    <p>$45 • 100% Cotton • Made to Last</p>
+                </div>
+
+                <div class="collection-grid">
+                    <article class="shirt-card">
+                        <div class="shirt-images">
+                            <img src="images/shirt1_front.png" alt="Beach Truck t-shirt front view">
+                            <img src="images/shirt1_back.png" alt="Beach Truck t-shirt back view">
+                        </div>
+                        <div class="shirt-info">
+                            <h3 class="shirt-name">Beach Truck</h3>
+                            <p class="shirt-tagline">Vintage soul meets coastal freedom</p>
+                        </div>
+                    </article>
+
+                    <article class="shirt-card">
+                        <div class="shirt-images">
+                            <img src="images/shirt2_front.png" alt="Longhorn Pier t-shirt front view">
+                            <img src="images/shirt2_back.png" alt="Longhorn Pier t-shirt back view">
+                        </div>
+                        <div class="shirt-info">
+                            <h3 class="shirt-name">Longhorn Pier</h3>
+                            <p class="shirt-tagline">Texas pride meets ocean tide</p>
+                        </div>
+                    </article>
+
+                    <article class="shirt-card">
+                        <div class="shirt-images">
+                            <img src="images/shirt3_front.png" alt="Vintage Skull t-shirt front view">
+                            <img src="images/shirt3_back.png" alt="Vintage Skull t-shirt back view">
+                        </div>
+                        <div class="shirt-info">
+                            <h3 class="shirt-name">Vintage Skull</h3>
+                            <p class="shirt-tagline">Heritage. Grit. Timeless.</p>
+                        </div>
+                    </article>
+
+                    <article class="shirt-card">
+                        <div class="shirt-images">
+                            <img src="images/shirt4_front.png" alt="Wave + Texas t-shirt front view">
+                            <img src="images/shirt4_back.png" alt="Wave + Texas t-shirt back view">
+                        </div>
+                        <div class="shirt-info">
+                            <h3 class="shirt-name">Wave + Texas</h3>
+                            <p class="shirt-tagline">Clean lines. Bold roots.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2 class="cta-title">Coming Soon</h2>
+                <p class="cta-sub">We're putting the finishing touches on the collection.<br>Follow along for the
+                    launch.</p>
+                <span class="cta-badge">ILM × ATX</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">GRR</div>
+        <p class="footer-tagline">Gather. Rest. Rise.</p>
+        <p class="footer-locations">ILM × ATX</p>
+    </footer>
+</body>
+
+</html>
