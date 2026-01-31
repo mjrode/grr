@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Gallery | GRR</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --orange: #C2561C;
+            --cream: #F5F2EB;
+            --black: #1A1A1A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--black);
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+        }
+
+        .gallery-item .name {
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--black);
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .lightbox .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .lightbox .image-name {
+            color: white;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .lightbox .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            padding: 1rem;
+            user-select: none;
+        }
+
+        .lightbox .prev {
+            left: 20px;
+        }
+
+        .lightbox .next {
+            right: 20px;
+        }
+
+        .lightbox .nav:hover {
+            color: var(--orange);
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .gallery-item img {
+                height: 200px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">GRR</a>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </header>
+
+    <main>
+        <h1>Design Gallery</h1>
+        <p class="subtitle">16 unique t-shirt designs for review and selection</p>
+
+        <div class="gallery" id="gallery">
+            <!-- Images loaded dynamically -->
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="close" onclick="closeLightbox()">×</span>
+        <span class="nav prev" onclick="prevImage()">‹</span>
+        <img id="lightbox-img" src="" alt="">
+        <p class="image-name" id="lightbox-name"></p>
+        <span class="nav next" onclick="nextImage()">›</span>
+    </div>
+
+    <script>
+        const images = [
+            'back.png',
+            'back 9.png',
+            'front.png',
+            'front 2.png',
+            'front 3.png',
+            'front 4.png',
+            'front 5.png',
+            'tshirt_design1_final.png',
+            'tshirt_design2_final.png',
+            'tshirt_design3_final.png',
+            'tshirt_design1_ilm_mid_1769888372040.png',
+            'tshirt_back_v2_1769887857034.png',
+            'tshirt_back_v1_small_grr_1769888128777.png',
+            'tshirt_back_v1_small_grr2_1769888142283.png',
+            'tshirt_back_design1_final_1769888243937.png',
+            'tshirt_back_design1_v2_1769888257909.png'
+        ];
+
+        let currentIndex = 0;
+
+        // Render gallery
+        const gallery = document.getElementById('gallery');
+        images.forEach((img, index) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML = `
+                <img src="images/gallery/${encodeURIComponent(img)}" alt="${img}" onclick="openLightbox(${index})">
+                <div class="name">${img}</div>
+            `;
+            gallery.appendChild(item);
+        });
+
+        // Lightbox functions
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightbox() {
+            document.getElementById('lightbox-img').src = `images/gallery/${encodeURIComponent(images[currentIndex])}`;
+            document.getElementById('lightbox-name').textContent = images[currentIndex];
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+        });
+
+        // Close on background click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        });
+    </script>
+</body>
+
+</html>
