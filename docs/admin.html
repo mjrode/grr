@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Admin | GRR</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --orange: #C2561C;
+            --cream: #F5F2EB;
+            --black: #1A1A1A;
+            --green: #2E7D32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--cream);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--orange);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            display: grid;
+            grid-template-columns: 50px 1fr 100px 120px;
+            padding: 1rem 1.5rem;
+            background: var(--orange);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .result-row {
+            display: grid;
+            grid-template-columns: 50px 1fr 100px 120px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .rank.top {
+            font-size: 1.2rem;
+        }
+
+        .design-name {
+            font-weight: 500;
+        }
+
+        .votes {
+            font-weight: 600;
+        }
+
+        .bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .bar {
+            background: var(--orange);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .refresh-btn {
+            background: var(--orange);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .refresh-btn:hover {
+            opacity: 0.9;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--orange);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .last-updated {
+            opacity: 0.5;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .result-header,
+            .result-row {
+                grid-template-columns: 40px 1fr 60px;
+            }
+
+            .bar-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <h1>Vote Results</h1>
+        <p class="subtitle">Real-time voting data from Firebase</p>
+
+        <button class="refresh-btn" onclick="loadVotes()">↻ Refresh Data</button>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="total-votes">-</div>
+                <div class="stat-label">Total Votes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="designs-voted">-</div>
+                <div class="stat-label">Designs with Votes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="leader">-</div>
+                <div class="stat-label">Current Leader</div>
+            </div>
+        </div>
+
+        <div class="results">
+            <div class="result-header">
+                <span>Rank</span>
+                <span>Design</span>
+                <span>Votes</span>
+                <span>Share</span>
+            </div>
+            <div id="results-list">
+                <div class="result-row">Loading...</div>
+            </div>
+        </div>
+
+        <p class="last-updated" id="last-updated"></p>
+    </div>
+
+    <script>
+        const FIREBASE_URL = 'https://gatherrestrise-default-rtdb.firebaseio.com';
+
+        const designs = {
+            'back': 'Back Design 1',
+            'back9': 'Back Design 9',
+            'front': 'Front Design 1',
+            'front2': 'Front Design 2',
+            'front3': 'Front Design 3',
+            'front4': 'Front Design 4',
+            'front5': 'Front Design 5',
+            'design1final': 'Design 1 Final',
+            'design2final': 'Design 2 Final',
+            'design3final': 'Design 3 Final',
+            'design1ilm': 'Design 1 ILM',
+            'backv2': 'Back V2',
+            'backsmallgrr': 'Back Small GRR',
+            'backsmallgrr2': 'Back Small GRR 2',
+            'backdesign1': 'Back Design 1 Final',
+            'backdesign1v2': 'Back Design 1 V2'
+        };
+
+        async function loadVotes() {
+            try {
+                const res = await fetch(`${FIREBASE_URL}/votes.json`);
+                const data = await res.json() || {};
+
+                // Build sorted list
+                const results = Object.keys(designs).map(id => ({
+                    id,
+                    name: designs[id],
+                    votes: data[id] || 0
+                })).sort((a, b) => b.votes - a.votes);
+
+                const totalVotes = results.reduce((sum, r) => sum + r.votes, 0);
+                const designsWithVotes = results.filter(r => r.votes > 0).length;
+                const maxVotes = results[0]?.votes || 0;
+
+                // Update stats
+                document.getElementById('total-votes').textContent = totalVotes;
+                document.getElementById('designs-voted').textContent = designsWithVotes;
+                document.getElementById('leader').textContent = maxVotes > 0 ? results[0].name : 'None';
+
+                // Update list
+                const list = document.getElementById('results-list');
+                if (totalVotes === 0) {
+                    list.innerHTML = '<div class="result-row">No votes yet</div>';
+                } else {
+                    list.innerHTML = results.map((r, i) => `
+                        <div class="result-row">
+                            <span class="rank ${i < 3 ? 'top' : ''}">#${i + 1}</span>
+                            <span class="design-name">${r.name}</span>
+                            <span class="votes">${r.votes}</span>
+                            <div class="bar-container">
+                                <div class="bar" style="width: ${maxVotes ? (r.votes / maxVotes * 100) : 0}%"></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                document.getElementById('last-updated').textContent =
+                    'Last updated: ' + new Date().toLocaleString();
+
+            } catch (e) {
+                console.error('Error:', e);
+                document.getElementById('results-list').innerHTML =
+                    '<div class="result-row">Error loading data</div>';
+            }
+        }
+
+        // Auto-refresh every 30 seconds
+        loadVotes();
+        setInterval(loadVotes, 30000);
+    </script>
+</body>
+
+</html>
