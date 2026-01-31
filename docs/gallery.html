@@ -58,7 +58,6 @@
             color: var(--orange);
         }
 
-        /* Vote Counter */
         .vote-bar {
             background: var(--orange);
             color: white;
@@ -131,7 +130,6 @@
             font-size: 0.8rem;
             color: var(--black);
             font-weight: 500;
-            word-break: break-all;
             flex: 1;
         }
 
@@ -169,13 +167,19 @@
             right: 10px;
             background: var(--orange);
             color: white;
-            padding: 0.25rem 0.6rem;
+            padding: 0.4rem 0.7rem;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        /* Lightbox */
+        .vote-count::before {
+            content: '♥';
+        }
+
         .lightbox {
             display: none;
             position: fixed;
@@ -238,7 +242,6 @@
             color: var(--orange);
         }
 
-        /* Thank you message */
         .thank-you {
             background: var(--green);
             color: white;
@@ -252,6 +255,48 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2rem;
             margin-bottom: 0.5rem;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .leaderboard h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--orange);
+            margin-bottom: 1rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            font-weight: 700;
+            color: var(--orange);
+            width: 30px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-votes {
+            font-weight: 600;
+            color: var(--black);
         }
 
         @media (max-width: 768px) {
@@ -283,24 +328,26 @@
     </header>
 
     <div class="vote-bar" id="vote-bar">
-        You have <span id="votes-remaining">5</span> votes remaining
+        You have <span id="votes-remaining">3</span> votes remaining
     </div>
 
     <main>
         <h1>Design Gallery</h1>
-        <p class="subtitle">Click any design to enlarge. Vote for your 5 favorites!</p>
+        <p class="subtitle">Click any design to enlarge. Vote for your 3 favorites!</p>
 
         <div id="thank-you" class="thank-you" style="display: none;">
             <h2>🎉 Thanks for voting!</h2>
             <p>Your votes help us choose the best designs for our launch collection.</p>
         </div>
 
-        <div class="gallery" id="gallery">
-            <!-- Images loaded dynamically -->
+        <div class="leaderboard" id="leaderboard">
+            <h2>🏆 Current Leaders</h2>
+            <div id="leaderboard-list">Loading...</div>
         </div>
+
+        <div class="gallery" id="gallery"></div>
     </main>
 
-    <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <span class="close" onclick="closeLightbox()">×</span>
         <span class="nav prev" onclick="prevImage()">‹</span>
@@ -310,27 +357,30 @@
     </div>
 
     <script>
+        const FIREBASE_URL = 'https://gatherrestrise-default-rtdb.firebaseio.com';
+        const MAX_VOTES = 3;
+
         const images = [
-            'back.png',
-            'back 9.png',
-            'front.png',
-            'front 2.png',
-            'front 3.png',
-            'front 4.png',
-            'front 5.png',
-            'tshirt_design1_final.png',
-            'tshirt_design2_final.png',
-            'tshirt_design3_final.png',
-            'tshirt_design1_ilm_mid_1769888372040.png',
-            'tshirt_back_v2_1769887857034.png',
-            'tshirt_back_v1_small_grr_1769888128777.png',
-            'tshirt_back_v1_small_grr2_1769888142283.png',
-            'tshirt_back_design1_final_1769888243937.png',
-            'tshirt_back_design1_v2_1769888257909.png'
+            { id: 'back', file: 'back.png', name: 'Back Design 1' },
+            { id: 'back9', file: 'back 9.png', name: 'Back Design 9' },
+            { id: 'front', file: 'front.png', name: 'Front Design 1' },
+            { id: 'front2', file: 'front 2.png', name: 'Front Design 2' },
+            { id: 'front3', file: 'front 3.png', name: 'Front Design 3' },
+            { id: 'front4', file: 'front 4.png', name: 'Front Design 4' },
+            { id: 'front5', file: 'front 5.png', name: 'Front Design 5' },
+            { id: 'design1final', file: 'tshirt_design1_final.png', name: 'Design 1 Final' },
+            { id: 'design2final', file: 'tshirt_design2_final.png', name: 'Design 2 Final' },
+            { id: 'design3final', file: 'tshirt_design3_final.png', name: 'Design 3 Final' },
+            { id: 'design1ilm', file: 'tshirt_design1_ilm_mid_1769888372040.png', name: 'Design 1 ILM' },
+            { id: 'backv2', file: 'tshirt_back_v2_1769887857034.png', name: 'Back V2' },
+            { id: 'backsmallgrr', file: 'tshirt_back_v1_small_grr_1769888128777.png', name: 'Back Small GRR' },
+            { id: 'backsmallgrr2', file: 'tshirt_back_v1_small_grr2_1769888142283.png', name: 'Back Small GRR 2' },
+            { id: 'backdesign1', file: 'tshirt_back_design1_final_1769888243937.png', name: 'Back Design 1 Final' },
+            { id: 'backdesign1v2', file: 'tshirt_back_design1_v2_1769888257909.png', name: 'Back Design 1 V2' }
         ];
 
-        const MAX_VOTES = 5;
         let currentIndex = 0;
+        let globalVotes = {};
 
         // Cookie helpers
         function setCookie(name, value, days) {
@@ -345,42 +395,108 @@
             }, '');
         }
 
-        // Vote tracking
-        function getVotes() {
+        function getMyVotes() {
             const votes = getCookie('grr_votes');
             return votes ? JSON.parse(votes) : [];
         }
 
-        function saveVotes(votes) {
+        function saveMyVotes(votes) {
             setCookie('grr_votes', JSON.stringify(votes), 365);
         }
 
-        function toggleVote(imageName) {
-            let votes = getVotes();
-            const index = votes.indexOf(imageName);
+        // Firebase functions
+        async function loadAllVotes() {
+            try {
+                const res = await fetch(`${FIREBASE_URL}/votes.json`);
+                const data = await res.json();
+                globalVotes = data || {};
+                updateLeaderboard();
+                updateVoteCounts();
+            } catch (e) {
+                console.error('Error loading votes:', e);
+            }
+        }
 
-            if (index > -1) {
-                // Remove vote
-                votes.splice(index, 1);
-            } else if (votes.length < MAX_VOTES) {
-                // Add vote
-                votes.push(imageName);
+        async function incrementVote(imageId) {
+            try {
+                // Get current count
+                const res = await fetch(`${FIREBASE_URL}/votes/${imageId}.json`);
+                let count = await res.json() || 0;
+                count++;
+
+                // Update count
+                await fetch(`${FIREBASE_URL}/votes/${imageId}.json`, {
+                    method: 'PUT',
+                    body: JSON.stringify(count)
+                });
+
+                globalVotes[imageId] = count;
+                return count;
+            } catch (e) {
+                console.error('Error incrementing vote:', e);
+                return 0;
+            }
+        }
+
+        function updateLeaderboard() {
+            const sorted = images
+                .map(img => ({ ...img, votes: globalVotes[img.id] || 0 }))
+                .sort((a, b) => b.votes - a.votes)
+                .slice(0, 5);
+
+            const list = document.getElementById('leaderboard-list');
+            if (sorted[0].votes === 0) {
+                list.innerHTML = '<p style="opacity:0.6">No votes yet. Be the first!</p>';
+                return;
             }
 
-            saveVotes(votes);
+            list.innerHTML = sorted.map((item, i) => `
+                <div class="leaderboard-item">
+                    <span class="leaderboard-rank">#${i + 1}</span>
+                    <span class="leaderboard-name">${item.name}</span>
+                    <span class="leaderboard-votes">${item.votes} vote${item.votes !== 1 ? 's' : ''}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateVoteCounts() {
+            document.querySelectorAll('.vote-count').forEach(el => {
+                const count = globalVotes[el.dataset.id] || 0;
+                el.textContent = count;
+            });
+        }
+
+        async function toggleVote(imageId) {
+            let myVotes = getMyVotes();
+
+            if (myVotes.includes(imageId)) {
+                alert("You've already voted for this design.");
+                return;
+            }
+
+            if (myVotes.length >= MAX_VOTES) {
+                alert("You've used all 3 votes!");
+                return;
+            }
+
+            myVotes.push(imageId);
+            saveMyVotes(myVotes);
+
+            await incrementVote(imageId);
+
             updateUI();
+            updateLeaderboard();
+            updateVoteCounts();
         }
 
         function updateUI() {
-            const votes = getVotes();
-            const remaining = MAX_VOTES - votes.length;
+            const myVotes = getMyVotes();
+            const remaining = MAX_VOTES - myVotes.length;
 
-            // Update vote bar
-            document.getElementById('votes-remaining').textContent = remaining;
             const voteBar = document.getElementById('vote-bar');
 
             if (remaining === 0) {
-                voteBar.textContent = "✓ You've used all 5 votes! Thanks for voting!";
+                voteBar.textContent = "✓ You've used all 3 votes! Thanks for voting!";
                 voteBar.classList.add('complete');
                 document.getElementById('thank-you').style.display = 'block';
             } else {
@@ -389,39 +505,40 @@
                 document.getElementById('thank-you').style.display = 'none';
             }
 
-            // Update buttons
             document.querySelectorAll('.vote-btn').forEach(btn => {
-                const img = btn.dataset.image;
-                const isVoted = votes.includes(img);
+                const id = btn.dataset.id;
+                const isVoted = myVotes.includes(id);
                 btn.classList.toggle('voted', isVoted);
                 btn.textContent = isVoted ? '✓ Voted' : 'Vote';
-                btn.disabled = !isVoted && remaining === 0;
+                btn.disabled = isVoted || remaining === 0;
             });
         }
 
         // Render gallery
         const gallery = document.getElementById('gallery');
-        const votes = getVotes();
+        const myVotes = getMyVotes();
 
         images.forEach((img, index) => {
             const item = document.createElement('div');
             item.className = 'gallery-item';
-            const isVoted = votes.includes(img);
+            const isVoted = myVotes.includes(img.id);
 
             item.innerHTML = `
-                <img src="images/gallery/${encodeURIComponent(img)}" alt="${img}" onclick="openLightbox(${index})">
+                <span class="vote-count" data-id="${img.id}">0</span>
+                <img src="images/gallery/${encodeURIComponent(img.file)}" alt="${img.name}" onclick="openLightbox(${index})">
                 <div class="info">
-                    <span class="name">${img.replace(/_\d+\.png$/, '.png').replace(/_/g, ' ')}</span>
-                    <button class="vote-btn ${isVoted ? 'voted' : ''}" data-image="${img}" onclick="toggleVote('${img}')">${isVoted ? '✓ Voted' : 'Vote'}</button>
+                    <span class="name">${img.name}</span>
+                    <button class="vote-btn ${isVoted ? 'voted' : ''}" data-id="${img.id}" onclick="toggleVote('${img.id}')">${isVoted ? '✓ Voted' : 'Vote'}</button>
                 </div>
             `;
             gallery.appendChild(item);
         });
 
-        // Initial UI update
+        // Init
         updateUI();
+        loadAllVotes();
 
-        // Lightbox functions
+        // Lightbox
         function openLightbox(index) {
             currentIndex = index;
             updateLightbox();
@@ -435,8 +552,8 @@
         }
 
         function updateLightbox() {
-            document.getElementById('lightbox-img').src = `images/gallery/${encodeURIComponent(images[currentIndex])}`;
-            document.getElementById('lightbox-name').textContent = images[currentIndex];
+            document.getElementById('lightbox-img').src = `images/gallery/${encodeURIComponent(images[currentIndex].file)}`;
+            document.getElementById('lightbox-name').textContent = images[currentIndex].name;
         }
 
         function prevImage() {
@@ -449,7 +566,6 @@
             updateLightbox();
         }
 
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('lightbox').classList.contains('active')) return;
             if (e.key === 'Escape') closeLightbox();
@@ -457,7 +573,6 @@
             if (e.key === 'ArrowRight') nextImage();
         });
 
-        // Close on background click
         document.getElementById('lightbox').addEventListener('click', (e) => {
             if (e.target.id === 'lightbox') closeLightbox();
         });
