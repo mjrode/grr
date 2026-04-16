@@ -370,7 +370,59 @@
         }
 
         .story-content {
-            max-width: 640px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .story-split {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-10);
+            margin-top: var(--space-8);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .story-split {
+                grid-template-columns: 1fr auto 1fr;
+                gap: var(--space-10);
+                align-items: start;
+            }
+
+            .story-split::before {
+                content: "";
+                grid-column: 2;
+                width: 1px;
+                background: linear-gradient(180deg, transparent, var(--orange) 30%, var(--orange) 70%, transparent);
+                justify-self: center;
+                align-self: stretch;
+                opacity: 0.5;
+            }
+
+            .story-location:nth-child(1) {
+                grid-column: 1;
+                padding-top: var(--space-8);
+            }
+
+            .story-location:nth-child(3) {
+                grid-column: 3;
+                padding-top: 0;
+            }
+
+            .story-location:nth-child(3) h3,
+            .story-location:nth-child(3) .story-coord,
+            .story-location:nth-child(3) p {
+                text-align: right;
+            }
+        }
+
+        .story-coord {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: rgba(245, 242, 235, 0.5);
+            margin-bottom: var(--space-4);
         }
 
         .section-label {
@@ -444,12 +496,26 @@
 
         .pillars-grid {
             display: grid;
-            gap: var(--space-6);
+            gap: var(--space-8);
+            margin-top: var(--space-10);
+            position: relative;
         }
 
         .pillar {
             border-top: 3px solid var(--orange);
             padding-top: var(--space-5);
+            position: relative;
+        }
+
+        .pillar-number {
+            position: absolute;
+            top: var(--space-5);
+            right: 0;
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--rust);
+            letter-spacing: 0.1em;
+            opacity: 0.6;
         }
 
         .pillar h3 {
@@ -481,8 +547,14 @@
         @media (min-width: 768px) {
             .pillars-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: var(--space-8);
+                gap: var(--space-10);
+                align-items: start;
             }
+
+            /* Staircase: baseline → descend → rise — like the tagline itself */
+            .pillar:nth-child(1) { transform: translateY(0); }
+            .pillar:nth-child(2) { transform: translateY(var(--space-12)); }
+            .pillar:nth-child(3) { transform: translateY(calc(-1 * var(--space-6))); }
 
             .pillar h3 {
                 font-size: var(--text-3xl);
@@ -529,23 +601,185 @@
             align-items: center;
         }
 
-        .shirt-gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-4);
-        }
-
-        .shirt-gallery img {
+        /* 3D flipper stage */
+        .shirt-stage {
+            position: relative;
             width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 1 / 1;
+            perspective: 1400px;
         }
 
-        .shirt-gallery img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        .shirt-flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: grab;
+        }
+
+        .shirt-flipper:active { cursor: grabbing; }
+        .shirt-flipper.flipped { transform: rotateY(180deg); }
+
+        .shirt-face {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 12px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.6) 0%, transparent 70%);
+            filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.12));
+        }
+
+        .shirt-face--back { transform: rotateY(180deg); }
+
+        /* Face toggle tabs */
+        .shirt-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-3);
+            margin-top: var(--space-5);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .shirt-toggle {
+            background: transparent;
+            border: 1px solid rgba(26, 26, 26, 0.2);
+            color: var(--black);
+            padding: var(--space-2) var(--space-4);
+            font: inherit;
+            text-transform: inherit;
+            letter-spacing: inherit;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 180ms ease;
+        }
+
+        .shirt-toggle:hover { border-color: var(--orange); color: var(--orange); }
+
+        .shirt-toggle.active {
+            background: var(--black);
+            color: var(--cream);
+            border-color: var(--black);
+        }
+
+        .shirt-zoom {
+            background: transparent;
+            border: none;
+            color: var(--rust);
+            font-size: var(--text-base);
+            cursor: pointer;
+            padding: var(--space-2);
+            transition: color 180ms ease, transform 180ms ease;
+        }
+
+        .shirt-zoom:hover { color: var(--orange); transform: scale(1.15); }
+
+        /* Product anatomy */
+        .shirt-meta {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--rust);
+            margin-bottom: var(--space-4);
+        }
+
+        .shirt-meta span + span::before {
+            content: "·";
+            margin-right: var(--space-3);
+            color: rgba(122, 47, 18, 0.4);
+        }
+
+        .shirt-sizes {
+            margin-top: var(--space-5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        .size-label {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--rust);
+            opacity: 0.7;
+        }
+
+        .size-pills {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .size-pill {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(26, 26, 26, 0.25);
+            border-radius: 50%;
+            color: var(--black);
+            transition: all 180ms ease;
+        }
+
+        .size-pill:hover { border-color: var(--orange); color: var(--orange); }
+
+        .shirt-buy {
+            margin-top: var(--space-6);
+            padding-top: var(--space-5);
+            border-top: 1px solid rgba(26, 26, 26, 0.12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-5);
+            flex-wrap: wrap;
+        }
+
+        .shirt-notify {
+            display: inline-block;
+            background: var(--black);
+            color: var(--cream);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 180ms ease;
+        }
+
+        .shirt-notify:hover {
+            background: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .shirt-spec {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--rust);
+            opacity: 0.8;
         }
 
         .shirt-details {
@@ -579,37 +813,26 @@
         }
 
         .shirt-details .price {
-            font-family: var(--font-mono);
-            font-size: var(--text-lg);
-            font-weight: 500;
-            letter-spacing: 0.05em;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--text-3xl);
+            letter-spacing: -0.01em;
+            line-height: 1;
             color: var(--black);
-            margin-top: var(--space-5);
         }
 
         @media (min-width: 768px) {
             .shirt-feature-inner {
                 grid-template-columns: 1fr 1fr;
+                gap: var(--space-12);
             }
 
-            .shirt-feature:nth-child(even) .shirt-feature-inner {
-                direction: rtl;
-            }
-
-            .shirt-feature:nth-child(even) .shirt-feature-inner>* {
-                direction: ltr;
-            }
-
-            .shirt-details {
-                text-align: left;
-            }
+            /* Alternate: stage on right for even rows */
+            .shirt-feature:nth-child(even) .shirt-stage   { order: 2; }
+            .shirt-feature:nth-child(even) .shirt-details { order: 1; }
 
             .shirt-details h3 {
                 font-size: var(--text-4xl);
-            }
-
-            .shirt-details .description {
-                margin: 0;
             }
         }
 
@@ -849,6 +1072,42 @@
             outline-offset: 2px;
         }
 
+        /* Scroll progress — thin rust→orange line fixed to top */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg, var(--rust) 0%, var(--orange) 100%);
+            z-index: 60;
+            transition: width 80ms linear;
+            box-shadow: 0 0 12px rgba(194, 86, 28, 0.5);
+        }
+
+        /* Section labels + titles rise into view on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition:
+                opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Sub-reveals stagger off their parent section being in view */
+        .reveal--label { transition-delay: 50ms; }
+        .reveal--title { transition-delay: 150ms; }
+        .reveal--body  { transition-delay: 280ms; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+        }
+
         .skip-link {
             position: absolute;
             top: -40px;
@@ -878,6 +1137,7 @@
 
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
     <nav class="nav" aria-label="Main navigation">
         <a href="#top" class="nav-logo">GRR</a>
@@ -916,19 +1176,20 @@
             <div class="container">
                 <div class="story-content">
                     <span class="section-label">The Story</span>
-                    <h2 class="section-title">Two places shaped us.</h2>
-                    <div class="story-location">
-                        <h3>Wilmington, NC</h3>
-                        <p>Morning paddle-outs before the house wakes. Sunset dinners on the porch with family. Salt air
-                            and slow mornings.</p>
+                    <h2 class="section-title">Two places<br>shaped us.</h2>
+                    <div class="story-split">
+                        <div class="story-location">
+                            <p class="story-coord">34.2°N · 77.8°W</p>
+                            <h3>Wilmington, NC</h3>
+                            <p>Morning paddle-outs before the house wakes. Sunset dinners on the porch with family. Salt air and slow mornings.</p>
+                        </div>
+                        <div class="story-location">
+                            <p class="story-coord">30.3°N · 97.7°W</p>
+                            <h3>Austin, TX</h3>
+                            <p>Dawn gym sessions. Building something meaningful. Home for dinner with the people who matter most.</p>
+                        </div>
                     </div>
-                    <div class="story-location">
-                        <h3>Austin, TX</h3>
-                        <p>Dawn gym sessions. Building something meaningful. Home for dinner with the people who matter
-                            most.</p>
-                    </div>
-                    <p class="story-manifesto">For those who refuse to choose. Crush your goals AND be present. Fitness
-                        fuels. Rest sharpens. Family grounds.</p>
+                    <p class="story-manifesto">For those who refuse to choose. Crush your goals AND be present. Fitness fuels. Rest sharpens. Family grounds.</p>
                 </div>
             </div>
         </section>
@@ -940,16 +1201,19 @@
                 <h2 class="section-title">What GRR stands for</h2>
                 <div class="pillars-grid">
                     <div class="pillar">
+                        <span class="pillar-number">01 / G</span>
                         <h3>Gather</h3>
                         <p class="pillar-tagline">Family. Friends. Community.</p>
                         <p>Bring together what matters most. This is your fuel.</p>
                     </div>
                     <div class="pillar">
+                        <span class="pillar-number">02 / R</span>
                         <h3>Rest</h3>
                         <p class="pillar-tagline">Recovery is strategy.</p>
                         <p>Your best work comes after intentional rest. Not lazy—smart.</p>
                     </div>
                     <div class="pillar">
+                        <span class="pillar-number">03 / R</span>
                         <h3>Rise</h3>
                         <p class="pillar-tagline">Stronger every day.</p>
                         <p>Show up for the gym. For work. For your family. Rise to meet it.</p>
@@ -973,18 +1237,36 @@
         <section class="shirt-feature">
             <div class="container">
                 <div class="shirt-feature-inner">
-                    <div class="shirt-gallery">
-                        <img src="images/shirt1_front.png" alt="Beach Truck - Front" onclick="openLightbox(this)"
-                            data-name="Beach Truck - Front">
-                        <img src="images/shirt1_back.png" alt="Beach Truck - Back" onclick="openLightbox(this)"
-                            data-name="Beach Truck - Back">
+                    <div class="shirt-stage">
+                        <div class="shirt-flipper">
+                            <img class="shirt-face shirt-face--front" src="images/shirt1_front.png" alt="Beach Truck — Front" data-name="Beach Truck — Front" loading="lazy">
+                            <img class="shirt-face shirt-face--back" src="images/shirt1_back.png" alt="Beach Truck — Back" data-name="Beach Truck — Back" loading="lazy">
+                        </div>
+                        <div class="shirt-controls">
+                            <button class="shirt-toggle active" data-face="front">Front</button>
+                            <button class="shirt-toggle" data-face="back">Back</button>
+                            <button class="shirt-zoom" aria-label="Zoom image">⤢</button>
+                        </div>
                     </div>
                     <div class="shirt-details">
+                        <div class="shirt-meta">
+                            <span>No. 01 / 05</span>
+                            <span>Screen-printed</span>
+                        </div>
                         <h3>Beach Truck</h3>
                         <p class="tagline">Vintage soul meets coastal freedom</p>
-                        <p class="description">A sun-faded pickup loaded with boards, parked where the pier meets the
-                            sand. For those who chase both waves and goals.</p>
-                        <p class="price">$45</p>
+                        <p class="description">A sun-faded pickup loaded with boards, parked where the pier meets the sand. For those who chase both waves and goals.</p>
+                        <div class="shirt-sizes">
+                            <span class="size-label">Sizes</span>
+                            <div class="size-pills">
+                                <span class="size-pill">S</span><span class="size-pill">M</span><span class="size-pill">L</span><span class="size-pill">XL</span><span class="size-pill">XXL</span>
+                            </div>
+                        </div>
+                        <div class="shirt-buy">
+                            <span class="price">$45</span>
+                            <button class="shirt-notify">Notify me at launch</button>
+                            <span class="shirt-spec">100% heavy cotton</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -994,18 +1276,36 @@
         <section class="shirt-feature">
             <div class="container">
                 <div class="shirt-feature-inner">
-                    <div class="shirt-gallery">
-                        <img src="images/shirt2_front.png" alt="Longhorn Pier - Front" onclick="openLightbox(this)"
-                            data-name="Longhorn Pier - Front">
-                        <img src="images/shirt2_back.png" alt="Longhorn Pier - Back" onclick="openLightbox(this)"
-                            data-name="Longhorn Pier - Back">
+                    <div class="shirt-stage">
+                        <div class="shirt-flipper">
+                            <img class="shirt-face shirt-face--front" src="images/shirt2_front.png" alt="Longhorn Pier — Front" data-name="Longhorn Pier — Front" loading="lazy">
+                            <img class="shirt-face shirt-face--back" src="images/shirt2_back.png" alt="Longhorn Pier — Back" data-name="Longhorn Pier — Back" loading="lazy">
+                        </div>
+                        <div class="shirt-controls">
+                            <button class="shirt-toggle active" data-face="front">Front</button>
+                            <button class="shirt-toggle" data-face="back">Back</button>
+                            <button class="shirt-zoom" aria-label="Zoom image">⤢</button>
+                        </div>
                     </div>
                     <div class="shirt-details">
+                        <div class="shirt-meta">
+                            <span>No. 02 / 05</span>
+                            <span>Screen-printed</span>
+                        </div>
                         <h3>Longhorn Pier</h3>
                         <p class="tagline">Texas pride meets ocean tide</p>
-                        <p class="description">The unmistakable silhouette with the Carolina pier framed inside. Two
-                            spirits, one shirt.</p>
-                        <p class="price">$45</p>
+                        <p class="description">The unmistakable silhouette with the Carolina pier framed inside. Two spirits, one shirt.</p>
+                        <div class="shirt-sizes">
+                            <span class="size-label">Sizes</span>
+                            <div class="size-pills">
+                                <span class="size-pill">S</span><span class="size-pill">M</span><span class="size-pill">L</span><span class="size-pill">XL</span><span class="size-pill">XXL</span>
+                            </div>
+                        </div>
+                        <div class="shirt-buy">
+                            <span class="price">$45</span>
+                            <button class="shirt-notify">Notify me at launch</button>
+                            <span class="shirt-spec">100% heavy cotton</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1015,18 +1315,36 @@
         <section class="shirt-feature">
             <div class="container">
                 <div class="shirt-feature-inner">
-                    <div class="shirt-gallery">
-                        <img src="images/shirt3_front.png" alt="Vintage Skull - Front" onclick="openLightbox(this)"
-                            data-name="Vintage Skull - Front">
-                        <img src="images/shirt3_back.png" alt="Vintage Skull - Back" onclick="openLightbox(this)"
-                            data-name="Vintage Skull - Back">
+                    <div class="shirt-stage">
+                        <div class="shirt-flipper">
+                            <img class="shirt-face shirt-face--front" src="images/shirt3_front.png" alt="Vintage Skull — Front" data-name="Vintage Skull — Front" loading="lazy">
+                            <img class="shirt-face shirt-face--back" src="images/shirt3_back.png" alt="Vintage Skull — Back" data-name="Vintage Skull — Back" loading="lazy">
+                        </div>
+                        <div class="shirt-controls">
+                            <button class="shirt-toggle active" data-face="front">Front</button>
+                            <button class="shirt-toggle" data-face="back">Back</button>
+                            <button class="shirt-zoom" aria-label="Zoom image">⤢</button>
+                        </div>
                     </div>
                     <div class="shirt-details">
+                        <div class="shirt-meta">
+                            <span>No. 03 / 05</span>
+                            <span>Screen-printed</span>
+                        </div>
                         <h3>Vintage Skull</h3>
                         <p class="tagline">Heritage. Grit. Timeless.</p>
-                        <p class="description">Sun-bleached and wave-worn. The skull that's seen a thousand sunrises—and
-                            earned every one.</p>
-                        <p class="price">$45</p>
+                        <p class="description">Sun-bleached and wave-worn. The skull that's seen a thousand sunrises—and earned every one.</p>
+                        <div class="shirt-sizes">
+                            <span class="size-label">Sizes</span>
+                            <div class="size-pills">
+                                <span class="size-pill">S</span><span class="size-pill">M</span><span class="size-pill">L</span><span class="size-pill">XL</span><span class="size-pill">XXL</span>
+                            </div>
+                        </div>
+                        <div class="shirt-buy">
+                            <span class="price">$45</span>
+                            <button class="shirt-notify">Notify me at launch</button>
+                            <span class="shirt-spec">100% heavy cotton</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1036,18 +1354,36 @@
         <section class="shirt-feature">
             <div class="container">
                 <div class="shirt-feature-inner">
-                    <div class="shirt-gallery">
-                        <img src="images/shirt4_front.png" alt="Wave + Texas - Front" onclick="openLightbox(this)"
-                            data-name="Wave + Texas - Front">
-                        <img src="images/shirt4_back.png" alt="Wave + Texas - Back" onclick="openLightbox(this)"
-                            data-name="Wave + Texas - Back">
+                    <div class="shirt-stage">
+                        <div class="shirt-flipper">
+                            <img class="shirt-face shirt-face--front" src="images/shirt4_front.png" alt="Wave + Texas — Front" data-name="Wave + Texas — Front" loading="lazy">
+                            <img class="shirt-face shirt-face--back" src="images/shirt4_back.png" alt="Wave + Texas — Back" data-name="Wave + Texas — Back" loading="lazy">
+                        </div>
+                        <div class="shirt-controls">
+                            <button class="shirt-toggle active" data-face="front">Front</button>
+                            <button class="shirt-toggle" data-face="back">Back</button>
+                            <button class="shirt-zoom" aria-label="Zoom image">⤢</button>
+                        </div>
                     </div>
                     <div class="shirt-details">
+                        <div class="shirt-meta">
+                            <span>No. 04 / 05</span>
+                            <span>Screen-printed</span>
+                        </div>
                         <h3>Wave + Texas</h3>
                         <p class="tagline">Clean lines. Bold roots.</p>
-                        <p class="description">The Lone Star State split between coast and city. ILM flows, ATX rises.
-                        </p>
-                        <p class="price">$45</p>
+                        <p class="description">The Lone Star State split between coast and city. ILM flows, ATX rises.</p>
+                        <div class="shirt-sizes">
+                            <span class="size-label">Sizes</span>
+                            <div class="size-pills">
+                                <span class="size-pill">S</span><span class="size-pill">M</span><span class="size-pill">L</span><span class="size-pill">XL</span><span class="size-pill">XXL</span>
+                            </div>
+                        </div>
+                        <div class="shirt-buy">
+                            <span class="price">$45</span>
+                            <button class="shirt-notify">Notify me at launch</button>
+                            <span class="shirt-spec">100% heavy cotton</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1057,18 +1393,36 @@
         <section class="shirt-feature">
             <div class="container">
                 <div class="shirt-feature-inner">
-                    <div class="shirt-gallery">
-                        <img src="images/shirt5_front.png" alt="Sticker Bomb - Front" onclick="openLightbox(this)"
-                            data-name="Sticker Bomb - Front">
-                        <img src="images/shirt5_back.png" alt="Sticker Bomb - Back" onclick="openLightbox(this)"
-                            data-name="Sticker Bomb - Back">
+                    <div class="shirt-stage">
+                        <div class="shirt-flipper">
+                            <img class="shirt-face shirt-face--front" src="images/shirt5_front.png" alt="Sticker Bomb — Front" data-name="Sticker Bomb — Front" loading="lazy">
+                            <img class="shirt-face shirt-face--back" src="images/shirt5_back.png" alt="Sticker Bomb — Back" data-name="Sticker Bomb — Back" loading="lazy">
+                        </div>
+                        <div class="shirt-controls">
+                            <button class="shirt-toggle active" data-face="front">Front</button>
+                            <button class="shirt-toggle" data-face="back">Back</button>
+                            <button class="shirt-zoom" aria-label="Zoom image">⤢</button>
+                        </div>
                     </div>
                     <div class="shirt-details">
+                        <div class="shirt-meta">
+                            <span>No. 05 / 05</span>
+                            <span>Screen-printed</span>
+                        </div>
                         <h3>Sticker Bomb</h3>
                         <p class="tagline">Every badge tells a story.</p>
-                        <p class="description">Texas pennants, coastal vibes, and everything in between. The full GRR
-                            experience in one design.</p>
-                        <p class="price">$45</p>
+                        <p class="description">Texas pennants, coastal vibes, and everything in between. The full GRR experience in one design.</p>
+                        <div class="shirt-sizes">
+                            <span class="size-label">Sizes</span>
+                            <div class="size-pills">
+                                <span class="size-pill">S</span><span class="size-pill">M</span><span class="size-pill">L</span><span class="size-pill">XL</span><span class="size-pill">XXL</span>
+                            </div>
+                        </div>
+                        <div class="shirt-buy">
+                            <span class="price">$45</span>
+                            <button class="shirt-notify">Notify me at launch</button>
+                            <span class="shirt-spec">100% heavy cotton</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1112,6 +1466,7 @@
     </div>
 
     <script>
+        // ---------- Lightbox ----------
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxCaption = document.getElementById('lightbox-caption');
@@ -1129,12 +1484,79 @@
             document.body.style.overflow = '';
         }
 
-        lightbox.addEventListener('click', function (e) {
-            if (e.target === lightbox) closeLightbox();
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+        // ---------- Shirt flip + zoom ----------
+        document.querySelectorAll('.shirt-stage').forEach(stage => {
+            const flipper = stage.querySelector('.shirt-flipper');
+            const toggles = stage.querySelectorAll('.shirt-toggle');
+            const zoomBtn = stage.querySelector('.shirt-zoom');
+            const frontImg = stage.querySelector('.shirt-face--front');
+            const backImg  = stage.querySelector('.shirt-face--back');
+
+            const setFace = (face) => {
+                flipper.classList.toggle('flipped', face === 'back');
+                toggles.forEach(b => b.classList.toggle('active', b.dataset.face === face));
+            };
+
+            toggles.forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setFace(btn.dataset.face);
+            }));
+
+            flipper.addEventListener('click', () => {
+                setFace(flipper.classList.contains('flipped') ? 'front' : 'back');
+            });
+
+            zoomBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const visible = flipper.classList.contains('flipped') ? backImg : frontImg;
+                openLightbox(visible);
+            });
         });
 
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeLightbox();
+        // ---------- Scroll progress ----------
+        const progress = document.getElementById('scroll-progress');
+        const updateProgress = () => {
+            const h = document.documentElement;
+            const max = h.scrollHeight - h.clientHeight;
+            const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+            progress.style.width = pct + '%';
+        };
+        updateProgress();
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+
+        // ---------- Section reveal on scroll ----------
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+
+            document.querySelectorAll(
+                '.section-label, .section-title, .story-location, .pillar, .shirt-details, .shirt-stage'
+            ).forEach(el => {
+                el.classList.add('reveal');
+                if (el.classList.contains('section-label')) el.classList.add('reveal--label');
+                if (el.classList.contains('section-title')) el.classList.add('reveal--title');
+                if (el.classList.contains('story-location') || el.classList.contains('pillar') || el.classList.contains('shirt-details')) el.classList.add('reveal--body');
+                io.observe(el);
+            });
+        }
+
+        // ---------- Notify buttons — simple confirmation for now ----------
+        document.querySelectorAll('.shirt-notify').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.textContent = '✓ We’ll reach out';
+                btn.style.background = 'var(--rust)';
+                btn.disabled = true;
+            });
         });
     </script>
 </body>
