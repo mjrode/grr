@@ -7,7 +7,9 @@
     <title>Design Gallery | GRR</title>
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -15,6 +17,9 @@
             --cream: #F5F2EB;
             --black: #1A1A1A;
             --green: #2E7D32;
+            --font-display: 'Big Shoulders Display', 'Bebas Neue', sans-serif;
+            --font-body: 'Fraunces', Georgia, serif;
+            --font-mono: 'DM Mono', ui-monospace, monospace;
         }
 
         * {
@@ -24,10 +29,13 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-body);
             background: var(--cream);
             color: var(--black);
             min-height: 100vh;
+            line-height: 1.55;
+            font-optical-sizing: auto;
+            -webkit-font-smoothing: antialiased;
         }
 
         header {
@@ -42,8 +50,10 @@
         }
 
         .logo {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: var(--font-display);
+            font-weight: 900;
             font-size: 2rem;
+            letter-spacing: 0.02em;
             color: var(--orange);
             text-decoration: none;
         }
@@ -51,7 +61,10 @@
         .back-link {
             color: var(--cream);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
         }
 
         .back-link:hover {
@@ -63,7 +76,11 @@
             color: white;
             padding: 1rem 2rem;
             text-align: center;
-            font-weight: 600;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
             position: sticky;
             top: 60px;
             z-index: 99;
@@ -80,15 +97,20 @@
         }
 
         h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
             color: var(--orange);
             margin-bottom: 0.5rem;
         }
 
         .subtitle {
             color: var(--black);
-            opacity: 0.7;
+            font-style: italic;
+            opacity: 0.75;
             margin-bottom: 2rem;
         }
 
@@ -127,7 +149,10 @@
         }
 
         .gallery-item .name {
-            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--black);
             font-weight: 500;
             flex: 1;
@@ -140,8 +165,11 @@
             padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            font-weight: 500;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
             transition: all 0.2s;
             white-space: nowrap;
         }
@@ -169,8 +197,9 @@
             color: white;
             padding: 0.4rem 0.7rem;
             border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 4px;
@@ -216,7 +245,10 @@
         .lightbox .image-name {
             color: white;
             margin-top: 1rem;
-            font-size: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
         }
 
         .lightbox .nav {
@@ -252,8 +284,12 @@
         }
 
         .thank-you h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 2.25rem;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
             margin-bottom: 0.5rem;
         }
 
@@ -266,8 +302,12 @@
         }
 
         .leaderboard h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
             color: var(--orange);
             margin-bottom: 1rem;
         }
@@ -284,18 +324,25 @@
         }
 
         .leaderboard-rank {
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.25rem;
             color: var(--orange);
-            width: 30px;
+            width: 36px;
         }
 
         .leaderboard-name {
             flex: 1;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .leaderboard-votes {
-            font-weight: 600;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 500;
             color: var(--black);
         }
 
