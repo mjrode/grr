@@ -193,42 +193,63 @@
             }
         }
 
-        /* HERO — editorial oversized type */
+        /* HERO — drop-poster editorial layout */
         .hero {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: calc(var(--space-16) + 20px) clamp(var(--space-5), 6vw, var(--space-12)) calc(var(--space-10) + 60px);
-            gap: var(--space-8);
+            padding: calc(var(--space-14) + 20px) clamp(var(--space-5), 6vw, var(--space-12)) calc(var(--space-6) + 60px);
             position: relative;
             overflow: hidden;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: var(--space-6);
             background:
                 radial-gradient(ellipse 120% 80% at 50% 100%, rgba(194, 86, 28, 0.18) 0%, transparent 55%),
                 radial-gradient(ellipse 80% 50% at 80% 0%, rgba(20, 60, 58, 0.10) 0%, transparent 60%),
                 linear-gradient(180deg, var(--cream-warm) 0%, var(--cream) 40%, var(--sand) 100%);
         }
 
-        .hero-bottom {
-            position: relative;
-            z-index: 3;
-        }
-
-        .hero-mark {
+        /* TOP STRIP — logo · volume · origin */
+        .hero-topbar {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: flex-start;
             gap: var(--space-4);
             position: relative;
             z-index: 3;
         }
 
         .hero-logo {
-            width: 112px;
+            width: 56px;
             height: auto;
         }
 
-        .hero-meta {
+        .hero-volume {
+            display: none;
+            text-align: center;
+            font-family: var(--font-mono);
+            line-height: 1.35;
+        }
+
+        .hero-volume-tag {
+            display: block;
+            font-size: var(--text-xs);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--rust);
+            font-weight: 600;
+        }
+
+        .hero-volume-sub {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--black);
+            opacity: 0.55;
+            margin-top: 2px;
+        }
+
+        .hero-origin {
             font-family: var(--font-mono);
             font-size: var(--text-xs);
             text-transform: uppercase;
@@ -238,10 +259,27 @@
             line-height: 1.5;
         }
 
-        .hero-meta strong {
+        .hero-origin strong {
             display: block;
             color: var(--black);
-            font-weight: 500;
+            font-weight: 600;
+        }
+
+        /* MAIN GRID — left lede, right showcase */
+        .hero-main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-lede {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+            min-width: 0;
         }
 
         .hero-words {
@@ -249,16 +287,12 @@
             flex-direction: column;
             gap: 0.05em;
             margin: 0;
-            position: relative;
-            z-index: 3;
-            flex: 1 0 auto;
-            justify-content: center;
         }
 
         .hero-word {
             font-family: var(--font-display);
             font-weight: 900;
-            font-size: clamp(3rem, 13vw, 10rem);
+            font-size: clamp(3rem, 13vw, 9rem);
             line-height: 0.95;
             letter-spacing: -0.025em;
             text-transform: uppercase;
@@ -269,19 +303,16 @@
             animation: hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        /* Cascade indent — subtle diagonal flow, matches pillar staircase */
         .hero-word:nth-child(1) { animation-delay: 120ms; }
-        .hero-word:nth-child(2) { animation-delay: 260ms; padding-left: clamp(var(--space-3), 3vw, var(--space-10)); }
-        .hero-word:nth-child(3) { animation-delay: 400ms; padding-left: clamp(var(--space-6), 6vw, var(--space-20)); }
+        .hero-word:nth-child(2) { animation-delay: 260ms; padding-left: clamp(var(--space-3), 2vw, var(--space-8)); }
+        .hero-word:nth-child(3) { animation-delay: 400ms; padding-left: clamp(var(--space-6), 4vw, var(--space-14)); }
 
-        /* REST — outlined treatment */
         .hero-word--outline {
             color: transparent;
             -webkit-text-stroke: 2px var(--black);
             text-stroke: 2px var(--black);
         }
 
-        /* RISE — orange accent */
         .hero-word--accent {
             color: var(--orange);
             font-style: italic;
@@ -291,27 +322,240 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Horizon line — shorter, more refined */
-        .hero-horizon {
-            position: relative;
-            height: 1px;
-            margin: var(--space-6) 0 var(--space-5);
-            background: linear-gradient(90deg, transparent 0%, rgba(122, 47, 18, 0.45) 15%, rgba(122, 47, 18, 0.45) 85%, transparent 100%);
-            z-index: 2;
+        .hero-tagline {
+            font-size: var(--text-lg);
+            font-style: italic;
+            color: var(--rust);
+            max-width: 440px;
+            line-height: 1.45;
+            margin: 0;
+            opacity: 0;
+            animation: hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) 540ms forwards;
         }
 
-        .hero-horizon::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--orange) 0%, var(--rust) 100%);
-            box-shadow: 0 0 24px rgba(194, 86, 28, 0.55);
+        /* CTAs */
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4) var(--space-5);
+            align-items: center;
+            opacity: 0;
+            animation: hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) 680ms forwards;
         }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            background: var(--orange);
+            color: var(--cream);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            padding: var(--space-4) var(--space-6);
+            border-radius: 100px;
+            text-decoration: none;
+            box-shadow: 0 4px 22px rgba(194, 86, 28, 0.32);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            min-height: var(--touch-min);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(194, 86, 28, 0.45);
+        }
+
+        .hero-cta svg {
+            width: 16px;
+            height: 16px;
+            transition: transform var(--transition-base);
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(4px);
+        }
+
+        .hero-cta-secondary {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--black);
+            text-decoration: none;
+            padding: var(--space-2) 0;
+            border-bottom: 1px solid var(--rust);
+            transition: color var(--transition-base), border-color var(--transition-base);
+        }
+
+        .hero-cta-secondary:hover {
+            color: var(--orange);
+            border-color: var(--orange);
+        }
+
+        /* SHOWCASE — shirt + rotating seal */
+        .hero-showcase {
+            position: relative;
+            display: none;
+            place-items: center;
+        }
+
+        .hero-shirt-stack {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 1;
+            opacity: 0;
+            animation: hero-rise 1100ms cubic-bezier(0.22, 1, 0.36, 1) 400ms forwards;
+        }
+
+        .hero-shirt {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: rotate(-3deg);
+            filter: drop-shadow(0 30px 40px rgba(29, 20, 16, 0.18)) drop-shadow(0 8px 16px rgba(29, 20, 16, 0.12));
+            animation: shirt-float 7s ease-in-out infinite;
+        }
+
+        @keyframes shirt-float {
+            0%, 100% { transform: rotate(-3deg) translateY(0); }
+            50%      { transform: rotate(-3deg) translateY(-10px); }
+        }
+
+        .hero-seal {
+            position: absolute;
+            top: -2%;
+            right: -4%;
+            width: 34%;
+            aspect-ratio: 1;
+            animation: seal-spin 24s linear infinite;
+            pointer-events: none;
+        }
+
+        .hero-seal-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .hero-seal-text {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            fill: var(--rust);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .hero-seal-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: seal-spin 24s linear infinite reverse;
+            text-align: center;
+        }
+
+        .hero-seal-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--rust);
+            font-weight: 600;
+        }
+
+        .hero-seal-num {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 900;
+            color: var(--black);
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        @keyframes seal-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* Hang tag — sits bottom-left of the shirt */
+        .hero-tag {
+            position: absolute;
+            bottom: 6%;
+            left: 0;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--rust);
+            background: var(--cream-warm);
+            border: 1px solid rgba(122, 47, 18, 0.35);
+            padding: var(--space-2) var(--space-3);
+            border-radius: 2px;
+            transform: rotate(-6deg);
+            box-shadow: 0 4px 10px rgba(29, 20, 16, 0.08);
+            white-space: nowrap;
+        }
+
+        /* BOTTOM TICKER */
+        .hero-ticker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3) var(--space-6);
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-5);
+            border-top: 1px solid rgba(122, 47, 18, 0.25);
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-ticker-item {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--rust);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .hero-ticker-item::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--orange);
+            box-shadow: 0 0 8px rgba(194, 86, 28, 0.55);
+        }
+
+        .hero-ticker-item strong {
+            color: var(--black);
+            font-weight: 700;
+            font-size: var(--text-sm);
+            letter-spacing: 0.05em;
+        }
+
+        .hero-scroll {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--black);
+            text-decoration: none;
+            padding: var(--space-3) var(--space-4);
+            opacity: 0.7;
+            transition: opacity var(--transition-base), color var(--transition-base);
+            margin-left: auto;
+        }
+
+        .hero-scroll:hover { opacity: 1; color: var(--orange); }
 
         /* Decorative vertical marquee on far edge */
         .hero-marquee {
@@ -334,7 +578,7 @@
             text-transform: uppercase;
             letter-spacing: 0.4em;
             color: var(--rust);
-            opacity: 0.35;
+            opacity: 0.3;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
             white-space: nowrap;
@@ -346,61 +590,45 @@
             100% { transform: rotate(180deg) translateY(50%); }
         }
 
-        @media (min-width: 900px) {
-            .hero-marquee { display: flex; }
+        @media (min-width: 640px) {
+            .hero-logo { width: 72px; }
+            .hero-volume { display: block; }
         }
-
-        .hero-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: var(--space-6);
-            position: relative;
-            z-index: 3;
-        }
-
-        .hero-sub {
-            font-size: var(--text-lg);
-            font-style: italic;
-            color: var(--rust);
-            max-width: 380px;
-            line-height: 1.45;
-        }
-
-        .hero-scroll {
-            font-family: var(--font-mono);
-            font-size: var(--text-xs);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--black);
-            text-decoration: none;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            padding: var(--space-3) 0;
-            opacity: 0.7;
-            transition: opacity var(--transition-base);
-            flex-shrink: 0;
-        }
-
-        .hero-scroll:hover { opacity: 1; color: var(--orange); }
 
         @media (min-width: 768px) {
-            .hero-logo { width: 148px; }
+            .hero-logo { width: 84px; }
             .hero-word { letter-spacing: -0.035em; }
         }
 
+        @media (min-width: 1024px) {
+            .hero {
+                padding-top: calc(var(--space-16) + 80px);
+            }
+            .hero-main {
+                grid-template-columns: 1.1fr 0.9fr;
+                gap: var(--space-10);
+            }
+            .hero-showcase { display: grid; }
+            .hero-word { font-size: clamp(4rem, 9vw, 8rem); }
+            .hero-marquee { display: flex; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
-            .hero-word {
+            .hero-word,
+            .hero-tagline,
+            .hero-actions,
+            .hero-shirt-stack {
                 opacity: 1;
                 transform: none;
                 animation: none;
             }
-        }
-
-        @media (min-width: 768px) {
-            .hero {
-                padding-top: calc(var(--space-20) + 80px);
+            .hero-shirt,
+            .hero-seal,
+            .hero-seal-center,
+            .hero-marquee-text {
+                animation: none;
             }
+            .hero-shirt { transform: rotate(-3deg); }
         }
 
         /* STORY — dusk horizon */
@@ -1402,26 +1630,67 @@
                 <span class="hero-marquee-text">Gather · Rest · Rise · Gather · Rest · Rise · Gather · Rest · Rise · Gather · Rest · Rise · </span>
             </div>
 
-            <div class="hero-mark">
+            <!-- Top strip: logo · volume · origin -->
+            <header class="hero-topbar">
                 <img src="images/logo_circle.png" alt="GRR" class="hero-logo">
-                <span class="hero-meta">
+                <div class="hero-volume">
+                    <span class="hero-volume-tag">Vol. 01</span>
+                    <span class="hero-volume-sub">The First Drop</span>
+                </div>
+                <div class="hero-origin">
                     <strong>ILM × ATX</strong>
-                    Est. 2025
-                </span>
+                    <span>Est. 2025</span>
+                </div>
+            </header>
+
+            <!-- Main: lede + showcase -->
+            <div class="hero-main">
+                <div class="hero-lede">
+                    <h1 class="hero-words" aria-label="Gather. Rest. Rise.">
+                        <span class="hero-word">Gather.</span>
+                        <span class="hero-word hero-word--outline">Rest.</span>
+                        <span class="hero-word hero-word--accent">Rise.</span>
+                    </h1>
+                    <p class="hero-tagline">Premium lifestyle apparel for those who work hard and live well.</p>
+                    <div class="hero-actions">
+                        <a href="#waitlist" class="hero-cta">
+                            <span>Join the waitlist</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="#collection" class="hero-cta-secondary">See the drop ↓</a>
+                    </div>
+                </div>
+
+                <div class="hero-showcase" aria-hidden="true">
+                    <div class="hero-shirt-stack">
+                        <img src="images/shirt3_back.png" alt="" class="hero-shirt" loading="eager">
+                        <div class="hero-seal">
+                            <svg class="hero-seal-svg" viewBox="0 0 200 200">
+                                <defs>
+                                    <path id="heroSealPath" d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" fill="none"/>
+                                </defs>
+                                <text class="hero-seal-text">
+                                    <textPath href="#heroSealPath" startOffset="0">DROP 001 · SUMMER 2026 · DROP 001 · SUMMER 2026 · </textPath>
+                                </text>
+                            </svg>
+                            <div class="hero-seal-center">
+                                <span class="hero-seal-label">Drop</span>
+                                <span class="hero-seal-num">001</span>
+                            </div>
+                        </div>
+                        <span class="hero-tag">Hand-illustrated · Made in USA</span>
+                    </div>
+                </div>
             </div>
 
-            <h1 class="hero-words" aria-label="Gather. Rest. Rise.">
-                <span class="hero-word">Gather.</span>
-                <span class="hero-word hero-word--outline">Rest.</span>
-                <span class="hero-word hero-word--accent">Rise.</span>
-            </h1>
-
-            <div class="hero-bottom">
-                <div class="hero-horizon" aria-hidden="true"></div>
-                <div class="hero-footer">
-                    <p class="hero-sub">Premium lifestyle apparel for those who work hard and live well.</p>
-                    <a href="#story" class="hero-scroll">Scroll ↓</a>
-                </div>
+            <!-- Bottom ticker -->
+            <div class="hero-ticker">
+                <div class="hero-ticker-item"><strong id="heroWaitlistCount">First 50</strong> on the list</div>
+                <div class="hero-ticker-item"><strong>5 designs</strong> · Vol.01</div>
+                <div class="hero-ticker-item"><strong>Summer '26</strong> drop</div>
+                <a href="#story" class="hero-scroll">Scroll ↓</a>
             </div>
         </section>
 
@@ -1693,7 +1962,7 @@
         </section>
 
         <!-- CTA — drop countdown + waitlist -->
-        <section class="cta">
+        <section class="cta" id="waitlist">
             <div class="container cta-inner">
                 <span class="cta-eyebrow">The Drop</span>
                 <h2 class="cta-title">Coming Summer '26</h2>
