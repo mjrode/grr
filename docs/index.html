@@ -224,9 +224,11 @@
         }
 
         .hero-logo {
-            width: 72px;
+            width: 112px;
             height: auto;
-            opacity: 0.92;
+            /* Multiply blend drops the PNG's cream fill into the cream gradient —
+               the rectangular edge disappears, the rust mark reads clean */
+            mix-blend-mode: multiply;
         }
 
         .hero-meta {
@@ -386,7 +388,7 @@
         .hero-scroll:hover { opacity: 1; color: var(--orange); }
 
         @media (min-width: 768px) {
-            .hero-logo { width: 88px; }
+            .hero-logo { width: 148px; }
             .hero-word { letter-spacing: -0.035em; }
         }
 
