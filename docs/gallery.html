@@ -4,9 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Gallery | GRR</title>
+    <meta name="theme-color" content="#0B2826">
+    <title>Vote the Drop — 16 Designs, 3 Picks | GRR</title>
+    <meta name="description" content="Help us choose the launch lineup. Browse 16 original GRR designs and cast 3 votes.">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Vote the Drop — 16 GRR Designs">
+    <meta property="og:description" content="Help us choose the launch lineup. Three votes. No wrong answers.">
+    <meta property="og:image" content="https://gatherrestrise.com/images/title_hero.png">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap"
@@ -26,6 +33,29 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -60px;
+            left: 0;
+            background: var(--orange);
+            color: var(--cream);
+            padding: 0.6rem 1rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            z-index: 999;
+            transition: top 180ms ease;
+        }
+
+        .skip-link:focus { top: 0; }
+
+        a:focus, button:focus {
+            outline: 2px solid var(--orange);
+            outline-offset: 2px;
         }
 
         body {
@@ -71,19 +101,60 @@
             color: var(--orange);
         }
 
-        .vote-bar {
-            background: var(--orange);
-            color: white;
-            padding: 1rem 2rem;
-            text-align: center;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
+        /* LIVE ticker — event energy, not a progress bar */
+        .live-ticker {
+            background: #0B2826;
+            color: var(--cream);
+            padding: 0.9rem 2rem;
             position: sticky;
             top: 60px;
             z-index: 99;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            border-bottom: 1px solid rgba(194, 86, 28, 0.3);
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--orange);
+            box-shadow: 0 0 0 0 rgba(194, 86, 28, 0.8);
+            animation: live-pulse 1.8s ease-out infinite;
+        }
+
+        @keyframes live-pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(194, 86, 28, 0.7); }
+            70%  { box-shadow: 0 0 0 10px rgba(194, 86, 28, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(194, 86, 28, 0); }
+        }
+
+        .live-label { color: var(--orange); font-weight: 500; }
+        .live-stat strong { color: var(--cream); font-weight: 500; }
+        .live-stat { color: rgba(245, 242, 235, 0.7); }
+        .live-sep { color: rgba(245, 242, 235, 0.25); }
+
+        .vote-bar {
+            background: var(--orange);
+            color: white;
+            padding: 0.85rem 2rem;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            position: sticky;
+            top: calc(60px + 42px);
+            z-index: 98;
         }
 
         .vote-bar.complete {
@@ -346,6 +417,178 @@
             color: var(--black);
         }
 
+        /* Floating personal ballot widget */
+        .ballot {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: 260px;
+            background: #0B2826;
+            color: var(--cream);
+            border: 1px solid rgba(194, 86, 28, 0.35);
+            border-radius: 16px;
+            padding: 1rem;
+            z-index: 200;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            transform: translateY(calc(100% + 40px));
+            opacity: 0;
+            transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease;
+        }
+
+        .ballot.visible { transform: translateY(0); opacity: 1; }
+
+        .ballot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(245, 242, 235, 0.15);
+        }
+
+        .ballot-title { font-size: 1.1rem; }
+        .ballot-count {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--orange);
+            font-weight: 500;
+            margin-left: auto;
+            margin-right: 0.5rem;
+        }
+
+        .ballot-close {
+            background: transparent;
+            border: none;
+            color: rgba(245, 242, 235, 0.5);
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 0.25rem;
+            transition: color 160ms ease;
+        }
+
+        .ballot-close:hover { color: var(--cream); }
+
+        .ballot-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .ballot-slot {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.45rem;
+            border: 1px dashed rgba(245, 242, 235, 0.18);
+            border-radius: 10px;
+            min-height: 48px;
+            transition: all 220ms ease;
+        }
+
+        .ballot-slot.filled {
+            border-style: solid;
+            border-color: rgba(194, 86, 28, 0.5);
+            background: rgba(194, 86, 28, 0.08);
+        }
+
+        .ballot-slot-index {
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--orange);
+            width: 20px;
+            text-align: center;
+        }
+
+        .ballot-slot-thumb {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: rgba(245, 242, 235, 0.08);
+        }
+
+        .ballot-slot-name {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(245, 242, 235, 0.7);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ballot-slot.filled .ballot-slot-name { color: var(--cream); }
+
+        .ballot-empty-note {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(245, 242, 235, 0.35);
+            flex: 1;
+        }
+
+        .ballot-share {
+            width: 100%;
+            margin-top: 0.75rem;
+            background: var(--orange);
+            color: var(--cream);
+            border: none;
+            font-family: var(--font-mono);
+            font-weight: 500;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            transition: all 200ms ease;
+        }
+
+        .ballot-share:hover { background: var(--cream); color: var(--orange); }
+        .ballot.complete .ballot-share { display: block; }
+
+        .ballot-toggle {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--orange);
+            border: 2px solid var(--cream);
+            color: var(--cream);
+            font-family: 'Big Shoulders Display', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 201;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            transition: transform 200ms ease;
+        }
+
+        .ballot-toggle:hover { transform: scale(1.08); }
+        .ballot-toggle.visible { display: flex; }
+
+        @media (max-width: 600px) {
+            .ballot { right: 12px; left: 12px; width: auto; bottom: 12px; }
+            .ballot-toggle { right: 12px; bottom: 12px; }
+        }
+
         @media (max-width: 768px) {
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
@@ -369,16 +612,27 @@
 </head>
 
 <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <header>
         <a href="index.html" class="logo">GRR</a>
         <a href="index.html" class="back-link">← Back to Home</a>
     </header>
 
+    <div class="live-ticker" aria-label="Live vote activity">
+        <span><span class="live-dot" aria-hidden="true"></span> <span class="live-label">Live</span></span>
+        <span class="live-sep">/</span>
+        <span class="live-stat"><strong id="live-total">0</strong> Votes Cast</span>
+        <span class="live-sep">·</span>
+        <span class="live-stat"><strong id="live-designs">0</strong> Designs Getting Love</span>
+        <span class="live-sep">·</span>
+        <span class="live-stat">Leading: <strong id="live-leader">—</strong></span>
+    </div>
+
     <div class="vote-bar" id="vote-bar">
         You have <span id="votes-remaining">3</span> votes remaining
     </div>
 
-    <main>
+    <main id="main">
         <h1>Design Gallery</h1>
         <p class="subtitle">Click any design to enlarge. Vote for your 3 favorites!</p>
 
@@ -402,6 +656,22 @@
         <p class="image-name" id="lightbox-name"></p>
         <span class="nav next" onclick="nextImage()">›</span>
     </div>
+
+    <!-- Floating personal ballot -->
+    <button class="ballot-toggle" id="ballot-toggle" aria-label="Open your ballot">☰</button>
+    <aside class="ballot" id="ballot" aria-label="Your ballot">
+        <div class="ballot-header">
+            <span class="ballot-title">Your Ballot</span>
+            <span class="ballot-count" id="ballot-count">0 / 3</span>
+            <button class="ballot-close" id="ballot-close" aria-label="Minimize ballot">−</button>
+        </div>
+        <div class="ballot-slots" id="ballot-slots">
+            <div class="ballot-slot" data-slot="0"><span class="ballot-slot-index">1</span><span class="ballot-empty-note">Pick one</span></div>
+            <div class="ballot-slot" data-slot="1"><span class="ballot-slot-index">2</span><span class="ballot-empty-note">Pick one</span></div>
+            <div class="ballot-slot" data-slot="2"><span class="ballot-slot-index">3</span><span class="ballot-empty-note">Pick one</span></div>
+        </div>
+        <button class="ballot-share" id="ballot-share">Share My Ballot</button>
+    </aside>
 
     <script>
         const FIREBASE_URL = 'https://gatherrestrise-default-rtdb.firebaseio.com';
@@ -494,16 +764,29 @@
             const list = document.getElementById('leaderboard-list');
             if (sorted[0].votes === 0) {
                 list.innerHTML = '<p style="opacity:0.6">No votes yet. Be the first!</p>';
-                return;
+            } else {
+                list.innerHTML = sorted.map((item, i) => `
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">#${i + 1}</span>
+                        <span class="leaderboard-name">${item.name}</span>
+                        <span class="leaderboard-votes">${item.votes} vote${item.votes !== 1 ? 's' : ''}</span>
+                    </div>
+                `).join('');
             }
+            updateLiveTicker(sorted);
+        }
 
-            list.innerHTML = sorted.map((item, i) => `
-                <div class="leaderboard-item">
-                    <span class="leaderboard-rank">#${i + 1}</span>
-                    <span class="leaderboard-name">${item.name}</span>
-                    <span class="leaderboard-votes">${item.votes} vote${item.votes !== 1 ? 's' : ''}</span>
-                </div>
-            `).join('');
+        function updateLiveTicker(sortedTop) {
+            const all = images.map(img => ({ ...img, votes: globalVotes[img.id] || 0 }));
+            const total = all.reduce((s, r) => s + r.votes, 0);
+            const withVotes = all.filter(r => r.votes > 0).length;
+            const leader = (sortedTop && sortedTop[0] && sortedTop[0].votes > 0) ? sortedTop[0].name : '—';
+            const elTotal = document.getElementById('live-total');
+            const elDesigns = document.getElementById('live-designs');
+            const elLeader = document.getElementById('live-leader');
+            if (elTotal) elTotal.textContent = total;
+            if (elDesigns) elDesigns.textContent = withVotes;
+            if (elLeader) elLeader.textContent = leader;
         }
 
         function updateVoteCounts() {
@@ -572,7 +855,7 @@
 
             item.innerHTML = `
                 <span class="vote-count" data-id="${img.id}">0</span>
-                <img src="images/gallery/${encodeURIComponent(img.file)}" alt="${img.name}" onclick="openLightbox(${index})">
+                <img src="images/gallery/${encodeURIComponent(img.file)}" alt="${img.name}" loading="lazy" decoding="async" onclick="openLightbox(${index})">
                 <div class="info">
                     <span class="name">${img.name}</span>
                     <button class="vote-btn ${isVoted ? 'voted' : ''}" data-id="${img.id}" onclick="toggleVote('${img.id}')">${isVoted ? '✓ Voted' : 'Vote'}</button>
@@ -623,6 +906,74 @@
         document.getElementById('lightbox').addEventListener('click', (e) => {
             if (e.target.id === 'lightbox') closeLightbox();
         });
+
+        // ---------- Floating ballot widget ----------
+        const ballot = document.getElementById('ballot');
+        const ballotToggle = document.getElementById('ballot-toggle');
+        const ballotShare = document.getElementById('ballot-share');
+        const ballotCount = document.getElementById('ballot-count');
+        const ballotSlots = document.querySelectorAll('.ballot-slot');
+        let ballotMinimized = false;
+
+        function showBallot() { ballot.classList.add('visible'); ballotToggle.classList.remove('visible'); ballotMinimized = false; }
+        function hideBallot() { ballot.classList.remove('visible'); ballotToggle.classList.add('visible'); ballotMinimized = true; }
+
+        function renderBallot() {
+            const myVotes = getMyVotes();
+            ballotCount.textContent = `${myVotes.length} / ${MAX_VOTES}`;
+            ballot.classList.toggle('complete', myVotes.length === MAX_VOTES);
+
+            ballotSlots.forEach((slot, i) => {
+                const vote = myVotes[i];
+                slot.classList.toggle('filled', !!vote);
+                if (vote) {
+                    const img = images.find(x => x.id === vote);
+                    slot.innerHTML = `
+                        <span class="ballot-slot-index">${i + 1}</span>
+                        <img class="ballot-slot-thumb" src="images/gallery/${encodeURIComponent(img.file)}" alt="">
+                        <span class="ballot-slot-name">${img.name}</span>
+                    `;
+                } else {
+                    slot.innerHTML = `
+                        <span class="ballot-slot-index">${i + 1}</span>
+                        <span class="ballot-empty-note">Pick one</span>
+                    `;
+                }
+            });
+
+            if (myVotes.length > 0 && !ballotMinimized) showBallot();
+        }
+
+        ballotToggle.addEventListener('click', showBallot);
+        document.getElementById('ballot-close').addEventListener('click', hideBallot);
+
+        // Share behavior — Web Share API with clipboard fallback
+        ballotShare.addEventListener('click', async () => {
+            const myVotes = getMyVotes();
+            const names = myVotes.map(id => images.find(x => x.id === id)?.name).filter(Boolean);
+            const text = `My GRR ballot: ${names.join(' · ')}. Vote yours at`;
+            const url = 'https://gatherrestrise.com/gallery.html';
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'My GRR Ballot', text, url });
+                    return;
+                } catch (err) { /* user cancelled; fall through to clipboard */ }
+            }
+            try {
+                await navigator.clipboard.writeText(`${text} ${url}`);
+                ballotShare.textContent = '✓ Link Copied';
+                setTimeout(() => { ballotShare.textContent = 'Share My Ballot'; }, 2200);
+            } catch {
+                ballotShare.textContent = 'Copy Failed';
+            }
+        });
+
+        // Re-render ballot whenever votes change — extend existing updateUI
+        const _origUpdateUI = updateUI;
+        updateUI = function() { _origUpdateUI.apply(this, arguments); renderBallot(); };
+
+        renderBallot();
     </script>
 </body>
 
